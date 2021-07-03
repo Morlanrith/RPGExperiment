@@ -3,7 +3,7 @@
 
 #include "PlayerStats.h"
 
-PlayerStats::PlayerStats(int HP, int atk, int def, int spd)
+PlayerStats::PlayerStats(int HP, int atk, int def, int spd, TArray<int32> attacks)
 {
 	maxHP = HP;
 	currentHP = HP;
@@ -34,6 +34,10 @@ int PlayerStats::Defense() {
 
 int PlayerStats::Speed() {
 	return speed;
+}
+
+TArray<int32> PlayerStats::AttackList() {
+	return attackList;
 }
 
 int PlayerStats::Damage(int incomingAttack) {

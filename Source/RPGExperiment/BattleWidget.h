@@ -16,7 +16,7 @@ class RPGEXPERIMENT_API UBattleWidget : public UUserWidget
 
 private:
 	UFUNCTION(BlueprintCallable)
-		void SetTarget(int speed, int attacker, int target, bool isPartyMember);
+		void SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember);
 	UFUNCTION(BlueprintCallable)
 		void ClearTargets();
 	UFUNCTION(BlueprintCallable)
@@ -28,6 +28,8 @@ public:
 		TArray<int32> indexSpeedOrder;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<int32> indexTargetOrder;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		TArray<int32> attackIdOrder;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<bool> isPlayerSpeedOrder;
 };

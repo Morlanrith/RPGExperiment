@@ -3,13 +3,14 @@
 
 #include "BattleWidget.h"
 
-void UBattleWidget::SetTarget(int speed, int attacker, int target, bool isPartyMember) {
+void UBattleWidget::SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember) {
 	// Checks speed values of all set attacks for the turn, adding this combatant at their correct spot in the turn order
 	for (int i = 0; i < speedOrder.Num(); i++) {
 		if (speed > speedOrder[i]) {
 			speedOrder.Insert(speed, i);
 			indexSpeedOrder.Insert(attacker, i);
 			indexTargetOrder.Insert(target, i);
+			attackIdOrder.Insert(attackID, i);
 			isPlayerSpeedOrder.Insert(isPartyMember, i);
 			return;
 		}
@@ -18,6 +19,7 @@ void UBattleWidget::SetTarget(int speed, int attacker, int target, bool isPartyM
 	speedOrder.Add(speed);
 	indexSpeedOrder.Add(attacker);
 	indexTargetOrder.Add(target);
+	attackIdOrder.Add(attackID);
 	isPlayerSpeedOrder.Add(isPartyMember);
 }
 
@@ -26,6 +28,7 @@ void UBattleWidget::ClearTargets() {
 	speedOrder.Empty();
 	indexSpeedOrder.Empty();
 	indexTargetOrder.Empty();
+	attackIdOrder.Empty();
 	isPlayerSpeedOrder.Empty();
 }
 
@@ -36,6 +39,7 @@ void UBattleWidget::ClearPlayerTarget(int playerIndex) {
 			speedOrder.RemoveAt(i);
 			indexSpeedOrder.RemoveAt(i);
 			indexTargetOrder.RemoveAt(i);
+			attackIdOrder.RemoveAt(i);
 			isPlayerSpeedOrder.RemoveAt(i);
 			return;
 		}

@@ -64,7 +64,8 @@ int UAdditionalOperations::GetMemberSpeed(int index) {
 	return party[index].Speed();
 }
 
-int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target) {
-	return party[target].Damage(incomingAttack);
+int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
+	int damageValue = incomingAttack * attackMultiplier;
+	return party[target].Damage(damageValue);
 }
 

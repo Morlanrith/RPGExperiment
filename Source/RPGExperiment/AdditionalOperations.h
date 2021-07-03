@@ -34,7 +34,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
-		int DamagePartyMember(int incomingAttack, int target);
+		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
 
 protected:
 	// Called when the game starts
