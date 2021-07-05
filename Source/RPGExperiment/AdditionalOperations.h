@@ -32,6 +32,8 @@ private:
 	UFUNCTION(BlueprintCallable)
 		int GetMemberSpeed(int index);
 	UFUNCTION(BlueprintCallable)
+		TArray<int32> GetMemberAttackList(int index);
+	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
@@ -44,6 +46,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)
-		void AddPartyMember(int HP, int atk, int def, int spd);
+		void AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks);
 		
 };

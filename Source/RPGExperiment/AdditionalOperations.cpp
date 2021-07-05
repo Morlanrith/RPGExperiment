@@ -31,8 +31,8 @@ void UAdditionalOperations::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
-void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd) {
-	PlayerStats newMember(HP, atk, def, spd);
+void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks) {
+	PlayerStats newMember(HP, atk, def, spd, attacks);
 	party.Add(newMember);
 }
 
@@ -62,6 +62,10 @@ int UAdditionalOperations::GetMemberDefense(int index) {
 
 int UAdditionalOperations::GetMemberSpeed(int index) {
 	return party[index].Speed();
+}
+
+TArray<int32> UAdditionalOperations::GetMemberAttackList(int index) {
+	return party[index].AttackList();
 }
 
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {

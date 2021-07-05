@@ -11,6 +11,6 @@
 class RPGEXPERIMENT_API PartyMemberStats : public PlayerStats
 {
 public:
-	PartyMemberStats(int HP, int atk, int def, int spd) :PlayerStats(HP, atk, def, spd) {}
+	PartyMemberStats(int HP, int atk, int def, int spd, TArray<int32> attacks) :PlayerStats(HP, atk, def, spd, attacks) {}
 	~PartyMemberStats();
 };

@@ -32,5 +32,7 @@ public:
 		TArray<int32> attackIdOrder;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		TArray<bool> isPlayerSpeedOrder;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 turnAttackIndex = 0;
 };
 

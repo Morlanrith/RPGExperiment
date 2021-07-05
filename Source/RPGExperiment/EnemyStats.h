@@ -11,6 +11,6 @@
 class RPGEXPERIMENT_API EnemyStats : public PlayerStats
 {
 public:
-	EnemyStats(int HP, int atk, int def, int spd) :PlayerStats(HP, atk, def, spd) {}
+	EnemyStats(int HP, int atk, int def, int spd, TArray<int32> attacks) :PlayerStats(HP, atk, def, spd, attacks) {}
 	~EnemyStats();
 };

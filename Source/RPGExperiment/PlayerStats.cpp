@@ -10,6 +10,7 @@ PlayerStats::PlayerStats(int HP, int atk, int def, int spd, TArray<int32> attack
 	attack = atk;
 	defense = def;
 	speed = spd;
+	attackList = attacks;
 }
 
 PlayerStats::~PlayerStats()

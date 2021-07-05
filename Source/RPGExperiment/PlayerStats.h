@@ -14,7 +14,7 @@ private:
 	TArray<int32> attackList;
 
 public:
-	PlayerStats(int HP, int atk, int def, int spd, TArray<int32> attacks = {});
+	PlayerStats(int HP, int atk, int def, int spd, TArray<int32> attacks);
 	~PlayerStats();
 	int MaxHP();
 	int CurrentHP();
