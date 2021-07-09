@@ -3,44 +3,47 @@
 
 #include "BattleWidget.h"
 
+FTurnOrderStruct::FTurnOrderStruct()
+{
+	CombatantSpeed = 0;
+	CombatantIndex = 0;
+	CombatantTargetIndex = 0;
+	CombatantAttackID = 0;
+	CombatantIsPlayer = true;
+}
+
+FTurnOrderStruct::FTurnOrderStruct(int speed, int index, int target, int attackID, bool isPlayer)
+{
+	CombatantSpeed = speed;
+	CombatantIndex = index;
+	CombatantTargetIndex = target;
+	CombatantAttackID = attackID;
+	CombatantIsPlayer = isPlayer;
+}
+
 void UBattleWidget::SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember) {
 	// Checks speed values of all set attacks for the turn, adding this combatant at their correct spot in the turn order
-	for (int i = 0; i < speedOrder.Num(); i++) {
-		if (speed > speedOrder[i]) {
-			speedOrder.Insert(speed, i);
-			indexSpeedOrder.Insert(attacker, i);
-			indexTargetOrder.Insert(target, i);
-			attackIdOrder.Insert(attackID, i);
-			isPlayerSpeedOrder.Insert(isPartyMember, i);
+	FTurnOrderStruct newAction(speed, attacker, target, attackID, isPartyMember);
+	for (int i = 0; i < turnOrder.Num(); i++) {
+		if (speed > turnOrder[i].CombatantSpeed) {
+			turnOrder.Insert(newAction, i);
 			return;
 		}
 	}
 	// Adds the combatant to the end of all lists as they are the slowest currently added
-	speedOrder.Add(speed);
-	indexSpeedOrder.Add(attacker);
-	indexTargetOrder.Add(target);
-	attackIdOrder.Add(attackID);
-	isPlayerSpeedOrder.Add(isPartyMember);
+	turnOrder.Add(newAction);
 }
 
 void UBattleWidget::ClearTargets() {
-	// Removes all turn selections for every combatant (should be changed later to use less TArrays, i.e. when stats are separated into player/enemy classes)
-	speedOrder.Empty();
-	indexSpeedOrder.Empty();
-	indexTargetOrder.Empty();
-	attackIdOrder.Empty();
-	isPlayerSpeedOrder.Empty();
+	// Removes all turn selections for every combatant
+	turnOrder.Empty();
 }
 
 void UBattleWidget::ClearPlayerTarget(int playerIndex) {
-	// Searches for the player with the given index and removes them from all lists (should be changed later)
-	for (int i = 0; i < indexSpeedOrder.Num(); i++) {
-		if (playerIndex == indexSpeedOrder[i]) {
-			speedOrder.RemoveAt(i);
-			indexSpeedOrder.RemoveAt(i);
-			indexTargetOrder.RemoveAt(i);
-			attackIdOrder.RemoveAt(i);
-			isPlayerSpeedOrder.RemoveAt(i);
+	// Searches for the player with the given index and removes them from the turn list
+	for (int i = 0; i < turnOrder.Num(); i++) {
+		if (playerIndex == turnOrder[i].CombatantIndex) {
+			turnOrder.RemoveAt(i);
 			return;
 		}
 	}

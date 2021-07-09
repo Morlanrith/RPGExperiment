@@ -9,6 +9,26 @@
 /**
  * 
  */
+USTRUCT(BlueprintType)
+struct FTurnOrderStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turn Order Struct")
+		int32 CombatantSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turn Order Struct")
+		int32 CombatantIndex;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turn Order Struct")
+		int32 CombatantTargetIndex;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turn Order Struct")
+		int32 CombatantAttackID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turn Order Struct")
+		bool CombatantIsPlayer;
+
+	FTurnOrderStruct();
+	FTurnOrderStruct(int speed, int index, int target, int attackID, bool isPlayer);
+};
+
 UCLASS()
 class RPGEXPERIMENT_API UBattleWidget : public UUserWidget
 {
@@ -23,15 +43,7 @@ private:
 		void ClearPlayerTarget(int playerIndex);
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<int32> speedOrder;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<int32> indexSpeedOrder;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<int32> indexTargetOrder;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<int32> attackIdOrder;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		TArray<bool> isPlayerSpeedOrder;
+		TArray<FTurnOrderStruct> turnOrder;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 turnAttackIndex = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

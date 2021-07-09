@@ -4,9 +4,29 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include <RPGExperiment\PlayerStats.h>
 #include "AdditionalOperations.generated.h"
 
+USTRUCT(BlueprintType)
+struct FCombatantStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 MaxHP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 CurrentHP;	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 Attack;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 Defense;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 Speed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		TArray<int32> AttackList;
+	FCombatantStruct();
+	FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks);
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RPGEXPERIMENT_API UAdditionalOperations : public UActorComponent
@@ -18,7 +38,8 @@ public:
 	UAdditionalOperations();
 
 private:
-	TArray<PlayerStats> party;
+
+	TArray<FCombatantStruct> party;
 	UFUNCTION(BlueprintCallable)
 		void RemovePartyMember(int index);
 	UFUNCTION(BlueprintCallable)
@@ -43,6 +64,10 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	UFUNCTION(BlueprintCallable)
+		TArray<FCombatantStruct> GetParty();
+	UFUNCTION(BlueprintCallable)
+		void SetParty(TArray<FCombatantStruct> savedParty);
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)

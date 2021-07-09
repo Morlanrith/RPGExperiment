@@ -12,6 +12,26 @@ UAdditionalOperations::UAdditionalOperations()
 	// ...
 }
 
+FCombatantStruct::FCombatantStruct()
+{
+	MaxHP = 1;
+	CurrentHP = 1;
+	Attack = 1;
+	Defense = 0;
+	Speed = 1;
+	AttackList = {};
+}
+
+FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks)
+{
+	MaxHP = HP;
+	CurrentHP = HP;
+	Attack = atk;
+	Defense = def;
+	Speed = spd;
+	AttackList = attacks;
+}
+
 
 // Called when the game starts
 void UAdditionalOperations::BeginPlay()
@@ -32,7 +52,7 @@ void UAdditionalOperations::TickComponent(float DeltaTime, ELevelTick TickType, 
 }
 
 void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks) {
-	PlayerStats newMember(HP, atk, def, spd, attacks);
+	FCombatantStruct newMember(HP, atk, def, spd, attacks);
 	party.Add(newMember);
 }
 
@@ -45,31 +65,46 @@ int UAdditionalOperations::GetPartySize() {
 }
 
 int UAdditionalOperations::GetMemberMaxHP(int index) {
-	return party[index].MaxHP();
+	return party[index].MaxHP;
 }
 
 int UAdditionalOperations::GetMemberCurrentHP(int index) {
-	return party[index].CurrentHP();
+	return party[index].CurrentHP;
 }
 
 int UAdditionalOperations::GetMemberAttack(int index) {
-	return party[index].Attack();
+	return party[index].Attack;
 }
 
 int UAdditionalOperations::GetMemberDefense(int index) {
-	return party[index].Defense();
+	return party[index].Defense;
 }
 
 int UAdditionalOperations::GetMemberSpeed(int index) {
-	return party[index].Speed();
+	return party[index].Speed;
 }
 
 TArray<int32> UAdditionalOperations::GetMemberAttackList(int index) {
-	return party[index].AttackList();
+	return party[index].AttackList;
 }
 
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
 	int damageValue = incomingAttack * attackMultiplier;
-	return party[target].Damage(damageValue);
+	int damageDone = damageValue - party[target].Defense; // Calculates damage amount
+	if (damageDone < 0 || party[target].CurrentHP == 0) return party[target].CurrentHP; // Ignores attack if it has no effect/target has not health left
+	int newHP = party[target].CurrentHP - damageDone; // Applies damage
+	if (newHP < 0) newHP = 0;
+	party[target].CurrentHP = newHP;
+	return newHP;
+}
+
+TArray<FCombatantStruct> UAdditionalOperations::GetParty()
+{
+	return party;
+}
+
+void UAdditionalOperations::SetParty(TArray<FCombatantStruct> savedParty)
+{
+	party = savedParty;
 }
 
