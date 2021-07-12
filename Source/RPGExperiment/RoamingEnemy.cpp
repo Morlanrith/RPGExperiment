@@ -1,32 +1,39 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EnemyParty.h"
+#include "RoamingEnemy.h"
 #include "AdditionalOperations.h"
 
 // Sets default values
-AEnemyParty::AEnemyParty()
+ARoamingEnemy::ARoamingEnemy()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	Enemies = CreateDefaultSubobject<UAdditionalOperations>(TEXT("An Enemy Party")); // Creates default additional operations component
 	// Adds 1 to 3 basic enemies to party (should be changed later to use different types of enemy)
 	for (int i = 0; i < rand() % 3 + 1; i++) {
-		Enemies->AddPartyMember(40, 10, 3, 6, {0,3});
+		Enemies->AddPartyMember(40, 10, 3, 6, { 0,3 });
 	}
 }
 
 // Called when the game starts or when spawned
-void AEnemyParty::BeginPlay()
+void ARoamingEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AEnemyParty::Tick(float DeltaTime)
+void ARoamingEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+}
+
+// Called to bind functionality to input
+void ARoamingEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
 

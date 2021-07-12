@@ -72,5 +72,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)
 		void AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks);
+	void AddPartyMember(FCombatantStruct newMember);
 		
 };

@@ -56,6 +56,10 @@ void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TA
 	party.Add(newMember);
 }
 
+void UAdditionalOperations::AddPartyMember(FCombatantStruct newMember) {
+	party.Add(newMember);
+}
+
 void UAdditionalOperations::RemovePartyMember(int index) {
 	party.RemoveAt(index);
 }
