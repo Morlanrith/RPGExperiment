@@ -42,5 +42,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		TArray<FEnemiesDataStructure> AvailableEnemies;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class UAdditionalOperations* Enemies;
 };

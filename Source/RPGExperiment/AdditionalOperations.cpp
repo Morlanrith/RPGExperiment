@@ -56,7 +56,7 @@ void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TA
 	party.Add(newMember);
 }
 
-void UAdditionalOperations::AddPartyMember(FCombatantStruct newMember) {
+void UAdditionalOperations::AddPartyMemberStruct(FCombatantStruct newMember) {
 	party.Add(newMember);
 }
 
