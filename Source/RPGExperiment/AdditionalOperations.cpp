@@ -20,9 +20,10 @@ FCombatantStruct::FCombatantStruct()
 	Defense = 0;
 	Speed = 1;
 	AttackList = {};
+	ModelID = FName(TEXT("0"));
 }
 
-FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks)
+FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID)
 {
 	MaxHP = HP;
 	CurrentHP = HP;
@@ -30,6 +31,7 @@ FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int
 	Defense = def;
 	Speed = spd;
 	AttackList = attacks;
+	ModelID = modelID;
 }
 
 
@@ -51,8 +53,8 @@ void UAdditionalOperations::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
-void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks) {
-	FCombatantStruct newMember(HP, atk, def, spd, attacks);
+void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID) {
+	FCombatantStruct newMember(HP, atk, def, spd, attacks, modelID);
 	party.Add(newMember);
 }
 
