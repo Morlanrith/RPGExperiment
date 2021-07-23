@@ -97,11 +97,14 @@ TArray<int32> UAdditionalOperations::GetMemberAttackList(int index) {
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
 	int damageValue = incomingAttack * attackMultiplier;
 	int damageDone = damageValue - party[target].Defense; // Calculates damage amount
-	if (damageDone < 0 || party[target].CurrentHP == 0) return party[target].CurrentHP; // Ignores attack if it has no effect/target has not health left
+	if (damageDone < 0 || party[target].CurrentHP == 0) return 0; // Ignores attack if it has no effect/target has not health left
 	int newHP = party[target].CurrentHP - damageDone; // Applies damage
-	if (newHP < 0) newHP = 0;
+	if (newHP < 0) {
+		newHP = 0;
+		damageDone = party[target].CurrentHP;
+	}
 	party[target].CurrentHP = newHP;
-	return newHP;
+	return damageDone;
 }
 
 TArray<FCombatantStruct> UAdditionalOperations::GetParty()
