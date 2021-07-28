@@ -7,6 +7,20 @@
 #include "AdditionalOperations.generated.h"
 
 USTRUCT(BlueprintType)
+struct FAttackDelay
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 AttackTypeID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		float AnimationDelay;
+
+	FAttackDelay();
+	FAttackDelay(int typeID, float delay);
+};
+
+USTRUCT(BlueprintType)
 struct FCombatantStruct
 {
 	GENERATED_BODY()

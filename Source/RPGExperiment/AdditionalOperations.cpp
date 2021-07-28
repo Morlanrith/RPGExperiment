@@ -12,6 +12,18 @@ UAdditionalOperations::UAdditionalOperations()
 	// ...
 }
 
+FAttackDelay::FAttackDelay()
+{
+	AttackTypeID = 0;
+	AnimationDelay = 0.0f;
+}
+
+FAttackDelay::FAttackDelay(int typeID, float delay)
+{
+	AttackTypeID = typeID;
+	AnimationDelay = delay;
+}
+
 FCombatantStruct::FCombatantStruct()
 {
 	MaxHP = 1;
