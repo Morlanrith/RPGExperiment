@@ -74,6 +74,8 @@ private:
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
+	UFUNCTION(BlueprintCallable)
+		int HealPartyMember(int healAmount, int target);
 
 protected:
 	// Called when the game starts

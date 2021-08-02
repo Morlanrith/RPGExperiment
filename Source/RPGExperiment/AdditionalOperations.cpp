@@ -119,6 +119,17 @@ int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, flo
 	return damageDone;
 }
 
+int UAdditionalOperations::HealPartyMember(int healAmount, int target) {
+	int healingDone = healAmount;
+	int newHP = party[target].CurrentHP + healAmount; // Applies healing
+	if (newHP > party[target].MaxHP) { // Determines behaviour if healing exceeds max HP, i.e. should heal up to the max
+		newHP = party[target].MaxHP;
+		healingDone = healingDone - (party[target].CurrentHP - party[target].MaxHP);
+	}
+	party[target].CurrentHP = newHP; // Sets HP to its new value
+	return healingDone; // Returns the amount of healing done
+}
+
 TArray<FCombatantStruct> UAdditionalOperations::GetParty()
 {
 	return party;
