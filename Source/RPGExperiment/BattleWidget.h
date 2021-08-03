@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AdditionalOperations.h"
+#include "Engine/DataTable.h"
 #include "Blueprint/UserWidget.h"
 #include "BattleWidget.generated.h"
 
@@ -29,14 +31,52 @@ struct FTurnOrderStruct
 	FTurnOrderStruct(int speed, int index, int target, int attackID, bool isPlayer);
 };
 
+USTRUCT(BlueprintType)
+struct FAttackNumberStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Number Struct")
+		int32 DamageValue;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Number Struct")
+		int32 Target;
+
+	FAttackNumberStruct();
+	FAttackNumberStruct(int damage, int target);
+};
+
+USTRUCT(BlueprintType)
+struct FAttackStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		FName AttackName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		float DamageMultiplier;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		int32 TargetNumber;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		bool SelectTarget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		bool AttackAll;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		int32 AnimationEnumID;
+};
+
 UCLASS()
 class RPGEXPERIMENT_API UBattleWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 private:
+	int RandomTarget(UAdditionalOperations* dParty);
+	UFUNCTION(BlueprintCallable)
+		void ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAdditionalOperations* playerParty);
 	UFUNCTION(BlueprintCallable)
 		void SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember);
+	UFUNCTION(BlueprintCallable)
+		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
 	UFUNCTION(BlueprintCallable)
 		void ClearTargets();
 	UFUNCTION(BlueprintCallable)

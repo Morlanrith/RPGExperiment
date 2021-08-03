@@ -56,6 +56,12 @@ public:
 private:
 
 	TArray<FCombatantStruct> party;
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
+public:	
 	UFUNCTION(BlueprintCallable)
 		void RemovePartyMember(int index);
 	UFUNCTION(BlueprintCallable)
@@ -76,12 +82,6 @@ private:
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
 	UFUNCTION(BlueprintCallable)
 		int HealPartyMember(int healAmount, int target);
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-public:	
 	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)
