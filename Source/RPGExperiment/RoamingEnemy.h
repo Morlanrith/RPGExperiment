@@ -41,11 +41,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		TArray<FEnemiesDataStructure> AvailableEnemies;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<FName> AvailableEnemies;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsMoving = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class UAdditionalOperations* Enemies;
 };
