@@ -6,6 +6,7 @@
 #include "AdditionalOperations.h"
 #include "Engine/DataTable.h"
 #include "Blueprint/UserWidget.h"
+#include "Runtime/UMG/Public/UMG.h"
 #include "BattleWidget.generated.h"
 
 /**
@@ -77,6 +78,12 @@ private:
 		void SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember);
 	UFUNCTION(BlueprintCallable)
 		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
+	UFUNCTION(BlueprintCallable)
+		TArray<int32> UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer);
+	UFUNCTION(BlueprintCallable)
+		TArray<int32> UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer);
+	UFUNCTION(BlueprintCallable)
+		TArray<int32> EndingTurn(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer);
 	UFUNCTION(BlueprintCallable)
 		void ClearTargets();
 	UFUNCTION(BlueprintCallable)

@@ -85,6 +85,50 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(dParty->DamagePartyMember(aParty->GetMemberAttack(aIndex), dIndex, tableRow.DamageMultiplier),dIndex) });
 }
 
+/*Updates the UI display for the player party's HP values.*/
+TArray<int32> UBattleWidget::UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer) {
+	TArray<int32> defeatIndexes; // Empty array for players that need to play their defeat animation
+	for (int i = 0; i < playerParty->GetPartySize(); i++) { // Iterates through each party member
+		UTextBlock* HPText = Cast<UTextBlock>(HPContainer->GetChildAt(i)); // Casts child i of the passed in container to a Text Block object
+		// Sets the text to show the party members current HP information
+		HPText->SetText(FText::FromString(FString::FromInt(playerParty->GetMemberCurrentHP(i)) + "/" + FString::FromInt(playerParty->GetMemberMaxHP(i))));
+		HPText->SetVisibility(ESlateVisibility::Visible); // Makes sure the HP label is visible
+		if (playerParty->GetMemberCurrentHP(i) == 0) defeatIndexes.Add(i); // If the party member has no HP remaining, list them in the defeat array
+	}
+	return defeatIndexes; // Returns a list of indexes for players that are defeated
+}
+
+/*Updates the UI display for the enemy party's HP values.*/
+TArray<int32> UBattleWidget::UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer) {
+	TArray<int32> hideIndexes; // Empty array for enemies that need to have their models hidden
+	for (int i = 0; i < enemyParty->GetPartySize(); i++) { // Iterates through each party member
+		UBorder* HPBorder = Cast<UBorder>(HPContainer->GetChildAt(i)); // Casts child i of the passed in container to a Border object
+		if (enemyParty->GetMemberCurrentHP(i) == 0) {
+			hideIndexes.Add(i); // If the party member has no HP remaining, adds them to the hide array
+			HPBorder->SetVisibility(ESlateVisibility::Collapsed); // Also collapses the border containing their HP information
+			continue;
+		}
+		HPBorder->SetVisibility(ESlateVisibility::Visible); // If the party member is still alive, makes sure their label is visible
+		// Then, obtains the child of the current border, and sets its text label to reflect the current value of their HP
+		Cast<UTextBlock>(HPBorder->GetChildAt(0))->SetText(FText::FromString(FString::FromInt(enemyParty->GetMemberCurrentHP(i)) + "/" + FString::FromInt(enemyParty->GetMemberMaxHP(i))));
+	}
+	return hideIndexes; // Returns a list of indexes for enemies that are defeated
+}
+
+/*Cleans up hidden enemy party members that were defeated in the now finished turn.*/
+TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer) {
+	ClearTargets(); // Clears out the set list of targets (in preparation for a new turn)
+	TArray<int32> destroyIndexes; // Empty array for enemies that need to have their models destroyed
+	for (int i = enemyParty->GetPartySize()-1; i >= 0; i--) { // Iterates backwards through each party member
+		if (enemyParty->GetMemberCurrentHP(i) == 0) { // If the enemy has been defeated
+			enemyParty->RemovePartyMember(i); // Removes them from their associated AdditionalOperations component
+			HPContainer->RemoveChildAt(enemyParty->GetPartySize()); // Removes the last border from the HP container
+			destroyIndexes.Add(i); // Adds the index to the list of indexes for models to be destroyed
+		}
+	}
+	return destroyIndexes; // Returns a list of indexes for enemies that are defeated
+}
+
 void UBattleWidget::ClearTargets() {
 	// Removes all turn selections for every combatant
 	turnOrder.Empty();

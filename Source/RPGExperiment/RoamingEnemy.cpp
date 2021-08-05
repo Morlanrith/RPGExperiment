@@ -21,6 +21,7 @@ void ARoamingEnemy::BeginPlay()
 	for (int i = 0; i < rand() % 3; i++) {
 		Enemies->AddPartyMemberStruct(EnemiesDataTable->FindRow<FEnemiesDataStructure>(AvailableEnemies[rand() % AvailableEnemies.Num()], FString())->Stats);
 	}
+
 	Super::BeginPlay();
 }
 
