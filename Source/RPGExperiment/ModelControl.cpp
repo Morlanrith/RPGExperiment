@@ -69,7 +69,7 @@ void UModelControl::ChangeCamera(int32 playerToChangeTo)
 void UModelControl::HideEnemyModels(TArray<int32> indexes)
 {
 	// Hides the Mesh of each model at the given indexes
-	for (int i = 0; i < indexes.Num(); i++) EnemyParty[indexes[i]]->FindComponentByClass<UStaticMeshComponent>()->SetVisibility(false);
+	for (int i = 0; i < indexes.Num(); i++) EnemyParty[indexes[i]]->FindComponentByClass<UMeshComponent>()->SetVisibility(false);
 }
 
 /*Destroys the models of enemy party members at the given indexes, and removes them from their model TArray.*/
