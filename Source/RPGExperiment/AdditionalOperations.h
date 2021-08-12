@@ -77,6 +77,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		TArray<int32> GetMemberAttackList(int index);
 	UFUNCTION(BlueprintCallable)
+		FName GetMemberModelID(int index);
+	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);

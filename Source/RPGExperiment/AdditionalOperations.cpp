@@ -106,6 +106,10 @@ TArray<int32> UAdditionalOperations::GetMemberAttackList(int index) {
 	return party[index].AttackList;
 }
 
+FName UAdditionalOperations::GetMemberModelID(int index) {
+	return party[index].ModelID;
+}
+
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
 	int damageValue = incomingAttack * attackMultiplier;
 	int damageDone = damageValue - party[target].Defense; // Calculates damage amount
