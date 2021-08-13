@@ -20,6 +20,9 @@ public:
         TArray<FCombatantStruct> SavedParty;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+        FTransform PlayerPos;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
         FString SaveSlotName;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
