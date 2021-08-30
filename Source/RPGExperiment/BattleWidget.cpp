@@ -121,6 +121,7 @@ TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVert
 	TArray<int32> destroyIndexes; // Empty array for enemies that need to have their models destroyed
 	for (int i = enemyParty->GetPartySize()-1; i >= 0; i--) { // Iterates backwards through each party member
 		if (enemyParty->GetMemberCurrentHP(i) == 0) { // If the enemy has been defeated
+			expEarned += enemyParty->GetMemberExp(i); // Adds enemy EXP to the earned EXP pool for the battle
 			enemyParty->RemovePartyMember(i); // Removes them from their associated AdditionalOperations component
 			HPContainer->RemoveChildAt(enemyParty->GetPartySize()); // Removes the last border from the HP container
 			destroyIndexes.Add(i); // Adds the index to the list of indexes for models to be destroyed

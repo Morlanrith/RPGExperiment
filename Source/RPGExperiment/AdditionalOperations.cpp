@@ -33,9 +33,16 @@ FCombatantStruct::FCombatantStruct()
 	Speed = 1;
 	AttackList = {};
 	ModelID = FName(TEXT("0"));
+	Level = 1;
+	Exp = 0;
+	ExpNeeded = 0;
+	HPGrowth = 10.0f;
+	AttackGrowth = 1.0f;
+	DefenseGrowth = 1.0f;
+	SpeedGrowth = 1.0f;
 }
 
-FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID)
+FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG)
 {
 	MaxHP = HP;
 	CurrentHP = HP;
@@ -44,6 +51,13 @@ FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int
 	Speed = spd;
 	AttackList = attacks;
 	ModelID = modelID;
+	Level = lvl;
+	Exp = 0;
+	ExpNeeded = expNeeded;
+	HPGrowth = HPG;
+	AttackGrowth = atkG;
+	DefenseGrowth = defG;
+	SpeedGrowth = spdG;
 }
 
 
@@ -65,8 +79,8 @@ void UAdditionalOperations::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
-void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID) {
-	FCombatantStruct newMember(HP, atk, def, spd, attacks, modelID);
+void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG) {
+	FCombatantStruct newMember(HP, atk, def, spd, attacks, modelID, lvl, expNeeded, HPG, atkG, defG, spdG);
 	party.Add(newMember);
 }
 
@@ -108,6 +122,10 @@ TArray<int32> UAdditionalOperations::GetMemberAttackList(int index) {
 
 FName UAdditionalOperations::GetMemberModelID(int index) {
 	return party[index].ModelID;
+}
+
+int UAdditionalOperations::GetMemberExp(int index) {
+	return party[index].Exp;
 }
 
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {

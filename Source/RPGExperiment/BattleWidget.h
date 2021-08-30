@@ -94,6 +94,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 turnAttackIndex = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int32 expEarned = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		bool chooseTarget = true;
 };
 

@@ -40,8 +40,24 @@ struct FCombatantStruct
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		TArray<int32> AttackList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 Level;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 Exp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 ExpNeeded;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		float HPGrowth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		float AttackGrowth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		float DefenseGrowth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		float SpeedGrowth;
+
 	FCombatantStruct();
-	FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID);
+	FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG);
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -79,6 +95,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FName GetMemberModelID(int index);
 	UFUNCTION(BlueprintCallable)
+		int GetMemberExp(int index);
+	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
@@ -91,7 +109,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)
-		void AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID);
+		void AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG);
 	UFUNCTION(BlueprintCallable)
 		void AddPartyMemberStruct(FCombatantStruct newMember);
 		
