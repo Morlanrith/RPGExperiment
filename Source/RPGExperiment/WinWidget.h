@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "AdditionalOperations.h"
+#include <Runtime\UMG\Public\UMG.h>
 #include "WinWidget.generated.h"
 
 /**
@@ -16,7 +17,7 @@ class RPGEXPERIMENT_API UWinWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintCallable)
-		TArray<FCombatantStruct> AddPartyExp(TArray<FCombatantStruct> party);
+		TArray<FCombatantStruct> AddPartyExp(TArray<FCombatantStruct> party, UVerticalBox* partyBox);
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 expEarned = 0;
 };

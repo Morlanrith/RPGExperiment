@@ -128,6 +128,14 @@ int UAdditionalOperations::GetMemberExp(int index) {
 	return party[index].Exp;
 }
 
+int UAdditionalOperations::GetMemberExpNeeded(int index) {
+	return party[index].ExpNeeded;
+}
+
+int UAdditionalOperations::GetMemberLevel(int index) {
+	return party[index].Level;
+}
+
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
 	int damageValue = incomingAttack * attackMultiplier;
 	int damageDone = damageValue - party[target].Defense; // Calculates damage amount

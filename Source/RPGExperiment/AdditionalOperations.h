@@ -97,6 +97,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetMemberExp(int index);
 	UFUNCTION(BlueprintCallable)
+		int GetMemberExpNeeded(int index);
+	UFUNCTION(BlueprintCallable)
+		int GetMemberLevel(int index);
+	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);

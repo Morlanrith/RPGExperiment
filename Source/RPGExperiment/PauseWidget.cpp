@@ -18,8 +18,16 @@ void UPauseWidget::DisplayPauseMenu(UVerticalBox* partyBox) {
 		FPlayersDataStructure* pRow = pDataTable->FindRow<FPlayersDataStructure>(pParty->GetMemberModelID(i), FString());
 		// Sets the portrait to the relevant image from the player row
 		Cast<UImage>(pBox->GetChildAt(0))->SetBrushFromTexture(pRow->Portrait);
-		// Sets the text to display the party members name and current health information
+		// Sets the text to display the party members stats and info
 		Cast<UTextBlock>(pBox->GetChildAt(1))->SetText(FText::FromString(pRow->Name + " " + FString::FromInt(pParty->GetMemberCurrentHP(i)) + "/" + FString::FromInt(pParty->GetMemberMaxHP(i))));
+		Cast<UTextBlock>(pBox->GetChildAt(2))->SetText(FText::FromString(
+			"Level : " + FString::FromInt(pParty->GetMemberLevel(i)) + "           " + 
+			"To Next Level : " + 
+			FString::FromInt(pParty->GetMemberExpNeeded(i) - pParty->GetMemberExp(i)) + " EXP"));
+		Cast<UTextBlock>(pBox->GetChildAt(3))->SetText(FText::FromString(
+			"ATK : " + FString::FromInt(pParty->GetMemberAttack(i)) + 
+			" DEF : " + FString::FromInt(pParty->GetMemberDefense(i)) + 
+			" SPD : " + FString::FromInt(pParty->GetMemberSpeed(i))));
 		pBox->SetVisibility(ESlateVisibility::Visible); // Makes the current Wrap Box visible
 	}
 }
