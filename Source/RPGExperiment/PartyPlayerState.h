@@ -26,6 +26,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UTexture2D* Portrait;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<int> Skills;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		TArray<int> SkillLevels;
 };
 
 UCLASS()
