@@ -63,6 +63,8 @@ struct FAttackStruct : public FTableRowBase
 		bool AttackAll;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		int32 AnimationEnumID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		FText AttackInfo;
 };
 
 UCLASS()
