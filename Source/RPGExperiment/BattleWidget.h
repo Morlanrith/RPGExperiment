@@ -78,6 +78,7 @@ private:
 		void ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAdditionalOperations* playerParty);
 	UFUNCTION(BlueprintCallable)
 		void SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember);
+	TArray<FAttackNumberStruct> FireHeal(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty);
 	UFUNCTION(BlueprintCallable)
 		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
 	UFUNCTION(BlueprintCallable)

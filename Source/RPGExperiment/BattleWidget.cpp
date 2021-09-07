@@ -62,9 +62,33 @@ void UBattleWidget::ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAddit
 	}
 }
 
+
+/*Fires the curent combatants heal.*/
+TArray<FAttackNumberStruct> UBattleWidget::FireHeal(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty) {
+	if (tableRow.AttackAll) { // Checks to see if the chosen heal is supposed to affect all ally combatants, or just one
+		TArray<FAttackNumberStruct> attackValues; // Creates an empty TArray of attack values to return
+		// Loops over each member of the party
+		for (int i = 0; i < aParty->GetPartySize(); i++) {
+			if (aParty->GetMemberCurrentHP(i) == 0) continue; // Moves to the next combatant if this target has no HP remaining
+			// Adds a value to the TArray, containing the heal value fired at the ally combatant, using HealPartyMember()
+			attackValues.Add(FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberAttack(aIndex), i), i));
+		}
+		return attackValues; // Returns the array of attack values
+	}
+	// If the attack is individual, then checks to see if the combatant has no HP remaining, or if the combatants attack doesn't let them pick a target
+	if (aParty->GetMemberCurrentHP(dIndex) == 0 || !tableRow.SelectTarget) {
+		// If this is the case, then a target must be chosen randomly from the remaining combatants
+		dIndex = RandomTarget(aParty);
+	}
+	// Returns a TArray containing the single heal value fired at the ally combatant, using HealPartyMember()
+	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberAttack(aIndex), dIndex),dIndex) });
+}
+
 /*Attempts to fire the curent combatants attack.*/
 TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty) {
 	if(aParty->GetMemberCurrentHP(aIndex) == 0) return TArray<FAttackNumberStruct>(); // Returns nothing if the attacker has no HP remaining
+	if (tableRow.DamageMultiplier < 0)
+		return FireHeal(tableRow, aIndex, dIndex, aParty);
 	if (tableRow.AttackAll) { // Checks to see if the chosen attack is supposed to hit all enemy combatants, or just one
 		TArray<FAttackNumberStruct> attackValues; // Creates an empty TArray of attack values to return
 		// Loops over each member of the opposing party
