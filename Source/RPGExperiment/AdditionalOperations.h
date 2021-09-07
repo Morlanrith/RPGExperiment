@@ -32,6 +32,8 @@ struct FCombatantStruct
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		int32 Attack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 Magic;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		int32 Defense;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		int32 Speed;
@@ -52,12 +54,14 @@ struct FCombatantStruct
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		float AttackGrowth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		float MagicGrowth;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		float DefenseGrowth;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		float SpeedGrowth;
 
 	FCombatantStruct();
-	FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG);
+	FCombatantStruct(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG);
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -87,6 +91,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetMemberAttack(int index);
 	UFUNCTION(BlueprintCallable)
+		int GetMemberMagic(int index);
+	UFUNCTION(BlueprintCallable)
 		int GetMemberDefense(int index);
 	UFUNCTION(BlueprintCallable)
 		int GetMemberSpeed(int index);
@@ -105,7 +111,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
 	UFUNCTION(BlueprintCallable)
-		int HealPartyMember(int healAmount, int target);
+		int HealPartyMember(int healAmount, int target, float healMultiplier);
 	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)
@@ -113,7 +119,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)
-		void AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG);
+		void AddPartyMember(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG);
 	UFUNCTION(BlueprintCallable)
 		void AddPartyMemberStruct(FCombatantStruct newMember);
 		

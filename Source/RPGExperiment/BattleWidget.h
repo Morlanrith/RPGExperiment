@@ -58,6 +58,8 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		int32 TargetNumber;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		int32 AttackType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		bool SelectTarget;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		bool AttackAll;

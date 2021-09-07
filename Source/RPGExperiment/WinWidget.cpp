@@ -24,6 +24,7 @@ TArray<FCombatantStruct> UWinWidget::AddPartyExp(TArray<FCombatantStruct> party,
 			party[i].MaxHP += party[i].Level % 2 == 0 ? party[i].HPGrowth : party[i].HPGrowth + 1;
 			party[i].CurrentHP = party[i].MaxHP;
 			party[i].Attack += party[i].Level % 2 == 0 ? party[i].AttackGrowth : party[i].AttackGrowth + 1;
+			party[i].Magic += party[i].Level % 2 == 0 ? party[i].MagicGrowth : party[i].MagicGrowth + 1;
 			party[i].Defense += party[i].Level % 2 == 0 ? party[i].DefenseGrowth : party[i].DefenseGrowth + 1;
 			party[i].Speed += party[i].Level % 2 == 0 ? party[i].SpeedGrowth : party[i].SpeedGrowth + 1;
 			// Checks if a new skill has been unlocked

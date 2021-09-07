@@ -26,6 +26,7 @@ void UPauseWidget::DisplayPauseMenu(UVerticalBox* partyBox) {
 			FString::FromInt(pParty->GetMemberExpNeeded(i) - pParty->GetMemberExp(i)) + " EXP"));
 		Cast<UTextBlock>(pBox->GetChildAt(3))->SetText(FText::FromString(
 			"ATK : " + FString::FromInt(pParty->GetMemberAttack(i)) + 
+			" MAG : " + FString::FromInt(pParty->GetMemberMagic(i)) +
 			" DEF : " + FString::FromInt(pParty->GetMemberDefense(i)) + 
 			" SPD : " + FString::FromInt(pParty->GetMemberSpeed(i))));
 		pBox->SetVisibility(ESlateVisibility::Visible); // Makes the current Wrap Box visible

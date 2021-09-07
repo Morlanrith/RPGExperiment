@@ -71,7 +71,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireHeal(FAttackStruct tableRow, int 
 		for (int i = 0; i < aParty->GetPartySize(); i++) {
 			if (aParty->GetMemberCurrentHP(i) == 0) continue; // Moves to the next combatant if this target has no HP remaining
 			// Adds a value to the TArray, containing the heal value fired at the ally combatant, using HealPartyMember()
-			attackValues.Add(FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberAttack(aIndex), i), i));
+			attackValues.Add(FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberMagic(aIndex), i, tableRow.DamageMultiplier), i));
 		}
 		return attackValues; // Returns the array of attack values
 	}
@@ -81,21 +81,24 @@ TArray<FAttackNumberStruct> UBattleWidget::FireHeal(FAttackStruct tableRow, int 
 		dIndex = RandomTarget(aParty);
 	}
 	// Returns a TArray containing the single heal value fired at the ally combatant, using HealPartyMember()
-	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberAttack(aIndex), dIndex),dIndex) });
+	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberMagic(aIndex), dIndex, tableRow.DamageMultiplier),dIndex) });
 }
 
 /*Attempts to fire the curent combatants attack.*/
 TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty) {
 	if(aParty->GetMemberCurrentHP(aIndex) == 0) return TArray<FAttackNumberStruct>(); // Returns nothing if the attacker has no HP remaining
-	if (tableRow.DamageMultiplier < 0)
+	int32 damageStat = 0;
+	if (tableRow.AttackType == 3)
 		return FireHeal(tableRow, aIndex, dIndex, aParty);
+	else if (tableRow.AttackType == 1) damageStat = aParty->GetMemberAttack(aIndex);
+	else if (tableRow.AttackType == 2) damageStat = aParty->GetMemberMagic(aIndex);
 	if (tableRow.AttackAll) { // Checks to see if the chosen attack is supposed to hit all enemy combatants, or just one
 		TArray<FAttackNumberStruct> attackValues; // Creates an empty TArray of attack values to return
 		// Loops over each member of the opposing party
 		for (int i = 0; i < dParty->GetPartySize(); i++) {
 			if (dParty->GetMemberCurrentHP(i) == 0) continue; // Moves to the next combatant if this target has no HP remaining
 			// Adds a value to the TArray, containing the damage value fired at the enemy combatant, using DamagePartyMember()
-			attackValues.Add(FAttackNumberStruct(dParty->DamagePartyMember(aParty->GetMemberAttack(aIndex), i, tableRow.DamageMultiplier),i));
+			attackValues.Add(FAttackNumberStruct(dParty->DamagePartyMember(damageStat, i, tableRow.DamageMultiplier),i));
 		}
 		return attackValues; // Returns the array of attack values
 	}
@@ -106,7 +109,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 		if (dIndex == -1) return TArray<FAttackNumberStruct>(); // Returns nothing if there are no enemy combatants remaining
 	}
 	// Returns a TArray containing the single damage value fired at the enemy combatant, using DamagePartyMember()
-	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(dParty->DamagePartyMember(aParty->GetMemberAttack(aIndex), dIndex, tableRow.DamageMultiplier),dIndex) });
+	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(dParty->DamagePartyMember(damageStat, dIndex, tableRow.DamageMultiplier),dIndex) });
 }
 
 /*Updates the UI display for the player party's HP values.*/

@@ -29,6 +29,7 @@ FCombatantStruct::FCombatantStruct()
 	MaxHP = 1;
 	CurrentHP = 1;
 	Attack = 1;
+	Magic = 1;
 	Defense = 0;
 	Speed = 1;
 	AttackList = {};
@@ -38,15 +39,17 @@ FCombatantStruct::FCombatantStruct()
 	ExpNeeded = 0;
 	HPGrowth = 10.0f;
 	AttackGrowth = 1.0f;
+	MagicGrowth = 1.0f;
 	DefenseGrowth = 1.0f;
 	SpeedGrowth = 1.0f;
 }
 
-FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG)
+FCombatantStruct::FCombatantStruct(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG)
 {
 	MaxHP = HP;
 	CurrentHP = HP;
 	Attack = atk;
+	Magic = mag;
 	Defense = def;
 	Speed = spd;
 	AttackList = attacks;
@@ -56,6 +59,7 @@ FCombatantStruct::FCombatantStruct(int HP, int atk, int def, int spd, TArray<int
 	ExpNeeded = expNeeded;
 	HPGrowth = HPG;
 	AttackGrowth = atkG;
+	MagicGrowth = magG;
 	DefenseGrowth = defG;
 	SpeedGrowth = spdG;
 }
@@ -79,8 +83,8 @@ void UAdditionalOperations::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
-void UAdditionalOperations::AddPartyMember(int HP, int atk, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float defG, float spdG) {
-	FCombatantStruct newMember(HP, atk, def, spd, attacks, modelID, lvl, expNeeded, HPG, atkG, defG, spdG);
+void UAdditionalOperations::AddPartyMember(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG) {
+	FCombatantStruct newMember(HP, atk, mag, def, spd, attacks, modelID, lvl, expNeeded, HPG, atkG, magG, defG, spdG);
 	party.Add(newMember);
 }
 
@@ -106,6 +110,10 @@ int UAdditionalOperations::GetMemberCurrentHP(int index) {
 
 int UAdditionalOperations::GetMemberAttack(int index) {
 	return party[index].Attack;
+}
+
+int UAdditionalOperations::GetMemberMagic(int index) {
+	return party[index].Magic;
 }
 
 int UAdditionalOperations::GetMemberDefense(int index) {
@@ -149,8 +157,8 @@ int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, flo
 	return damageDone;
 }
 
-int UAdditionalOperations::HealPartyMember(int healAmount, int target) {
-	int healingDone = healAmount;
+int UAdditionalOperations::HealPartyMember(int healAmount, int target, float healMultiplier) {
+	int healingDone = healAmount * healMultiplier;
 	int newHP = party[target].CurrentHP + healAmount; // Applies healing
 	if (newHP > party[target].MaxHP) { // Determines behaviour if healing exceeds max HP, i.e. should heal up to the max
 		healingDone -= (newHP - party[target].MaxHP);
