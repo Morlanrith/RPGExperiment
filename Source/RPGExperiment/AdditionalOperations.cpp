@@ -159,7 +159,7 @@ int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, flo
 
 int UAdditionalOperations::HealPartyMember(int healAmount, int target, float healMultiplier) {
 	int healingDone = healAmount * healMultiplier;
-	int newHP = party[target].CurrentHP + healAmount; // Applies healing
+	int newHP = party[target].CurrentHP + healingDone; // Applies healing
 	if (newHP > party[target].MaxHP) { // Determines behaviour if healing exceeds max HP, i.e. should heal up to the max
 		healingDone -= (newHP - party[target].MaxHP);
 		newHP = party[target].MaxHP;
