@@ -92,6 +92,10 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 		return FireHeal(tableRow, aIndex, dIndex, aParty);
 	else if (tableRow.AttackType == 1) damageStat = aParty->GetMemberAttack(aIndex);
 	else if (tableRow.AttackType == 2) damageStat = aParty->GetMemberMagic(aIndex);
+	else if (tableRow.AttackType == 4) {
+		aParty->ApplyBuff(aIndex,tableRow.AppliedBuff);
+		return TArray<FAttackNumberStruct>();
+	}
 	if (tableRow.AttackAll) { // Checks to see if the chosen attack is supposed to hit all enemy combatants, or just one
 		TArray<FAttackNumberStruct> attackValues; // Creates an empty TArray of attack values to return
 		// Loops over each member of the opposing party
@@ -154,6 +158,7 @@ TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVert
 			destroyIndexes.Add(i); // Adds the index to the list of indexes for models to be destroyed
 		}
 	}
+	enemyParty->TickBuffs();
 	return destroyIndexes; // Returns a list of indexes for enemies that are defeated
 }
 

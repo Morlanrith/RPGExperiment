@@ -64,6 +64,8 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		bool AttackAll;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		FBuffStruct AppliedBuff;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		int32 AnimationEnumID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		FText AttackInfo;

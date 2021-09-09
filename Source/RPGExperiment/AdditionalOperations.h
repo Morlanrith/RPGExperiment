@@ -21,6 +21,22 @@ struct FAttackDelay
 };
 
 USTRUCT(BlueprintType)
+struct FBuffStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Struct")
+		float Augmentation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Struct")
+		int32 ValueToChange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Struct")
+		int32 RemainingTurns;
+
+	FBuffStruct();
+	FBuffStruct(float aug, int valType, int turns);
+};
+
+USTRUCT(BlueprintType)
 struct FCombatantStruct
 {
 	GENERATED_BODY()
@@ -42,6 +58,8 @@ struct FCombatantStruct
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		TArray<int32> AttackList;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		TArray<FBuffStruct> Buffs = {};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		int32 Level;
@@ -112,6 +130,14 @@ public:
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
 	UFUNCTION(BlueprintCallable)
 		int HealPartyMember(int healAmount, int target, float healMultiplier);
+	UFUNCTION(BlueprintCallable)
+		void ApplyBuff(int target, FBuffStruct buff);
+	UFUNCTION(BlueprintCallable)
+		void RemoveBuff(int target, int buffIndex);
+	UFUNCTION(BlueprintCallable)
+		void TickBuffs();
+	UFUNCTION(BlueprintCallable)
+		void RemoveAllBuffs();
 	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)
