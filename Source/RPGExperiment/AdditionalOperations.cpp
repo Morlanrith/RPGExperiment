@@ -158,6 +158,10 @@ int UAdditionalOperations::GetMemberLevel(int index) {
 	return party[index].Level;
 }
 
+TArray<FBuffStruct> UAdditionalOperations::GetMemberBuffs(int index) {
+	return party[index].Buffs;
+}
+
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
 	int damageValue = incomingAttack * attackMultiplier;
 	int damageDone = damageValue - party[target].Defense; // Calculates damage amount
@@ -222,12 +226,9 @@ void UAdditionalOperations::TickBuffs() {
 	}
 }
 
-void UAdditionalOperations::RemoveAllBuffs() {
-	for (int i = 0; i < party.Num(); i++) {
-		for (int j = party[i].Buffs.Num() - 1; j >= 0; j--) {
-			RemoveBuff(i, j);
-		}
-	}
+void UAdditionalOperations::RemoveAllBuffs(int target) {
+	for (int i = party[target].Buffs.Num() - 1; i >= 0; i--)
+		RemoveBuff(target, i);
 }
 
 TArray<FCombatantStruct> UAdditionalOperations::GetParty()

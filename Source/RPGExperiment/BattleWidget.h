@@ -82,11 +82,12 @@ private:
 		void ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAdditionalOperations* playerParty);
 	UFUNCTION(BlueprintCallable)
 		void SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember);
+	UTexture2D* GetBuffIcon(int buffType);
 	TArray<FAttackNumberStruct> FireHeal(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty);
 	UFUNCTION(BlueprintCallable)
 		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
 	UFUNCTION(BlueprintCallable)
-		TArray<int32> UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer);
+		TArray<int32> UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer);
 	UFUNCTION(BlueprintCallable)
 		TArray<int32> UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer);
 	UFUNCTION(BlueprintCallable)

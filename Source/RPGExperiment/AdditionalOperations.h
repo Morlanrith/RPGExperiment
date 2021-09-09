@@ -125,6 +125,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetMemberLevel(int index);
 	UFUNCTION(BlueprintCallable)
+		TArray<FBuffStruct> GetMemberBuffs(int index);
+	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
 		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
@@ -137,7 +139,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void TickBuffs();
 	UFUNCTION(BlueprintCallable)
-		void RemoveAllBuffs();
+		void RemoveAllBuffs(int target);
 	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)
