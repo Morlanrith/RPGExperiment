@@ -153,18 +153,25 @@ TArray<int32> UBattleWidget::UpdatePlayerHP(UAdditionalOperations* playerParty, 
 }
 
 /*Updates the UI display for the enemy party's HP values.*/
-TArray<int32> UBattleWidget::UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer) {
+TArray<int32> UBattleWidget::UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer) {
 	TArray<int32> hideIndexes; // Empty array for enemies that need to have their models hidden
 	for (int i = 0; i < enemyParty->GetPartySize(); i++) { // Iterates through each party member
 		UBorder* HPBorder = Cast<UBorder>(HPContainer->GetChildAt(i)); // Casts child i of the passed in container to a Border object
+		UImage* BuffImage = Cast<UImage>(BuffContainer->GetChildAt(i));
 		if (enemyParty->GetMemberCurrentHP(i) == 0) {
 			hideIndexes.Add(i); // If the party member has no HP remaining, adds them to the hide array
 			HPBorder->SetVisibility(ESlateVisibility::Collapsed); // Also collapses the border containing their HP information
+			BuffImage->SetVisibility(ESlateVisibility::Collapsed);
 			continue;
 		}
 		HPBorder->SetVisibility(ESlateVisibility::Visible); // If the party member is still alive, makes sure their label is visible
 		// Then, obtains the child of the current border, and sets its text label to reflect the current value of their HP
 		Cast<UTextBlock>(HPBorder->GetChildAt(0))->SetText(FText::FromString(FString::FromInt(enemyParty->GetMemberCurrentHP(i)) + "/" + FString::FromInt(enemyParty->GetMemberMaxHP(i))));
+		if (enemyParty->GetMemberBuffs(i).Num() > 0) {
+			BuffImage->SetVisibility(ESlateVisibility::Visible);
+			BuffImage->SetBrushFromTexture(GetBuffIcon(enemyParty->GetMemberBuffs(i)[0].ValueToChange));
+		}
+		else BuffImage->SetVisibility(ESlateVisibility::Hidden);
 	}
 	return hideIndexes; // Returns a list of indexes for enemies that are defeated
 }
