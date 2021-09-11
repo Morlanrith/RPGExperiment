@@ -72,7 +72,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireHeal(FAttackStruct tableRow, int 
 			if (aParty->GetMemberCurrentHP(i) == 0) continue; // Moves to the next combatant if this target has no HP remaining
 			// Adds a value to the TArray, containing the heal value fired at the ally combatant, using HealPartyMember()
 			attackValues.Add(FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberMagic(aIndex), i, tableRow.DamageMultiplier), i));
-			if(tableRow.AppliedBuff.ValueToChange != -1) aParty->ApplyBuff(i, tableRow.AppliedBuff);
+			if(tableRow.AppliedBuff != FName("-1")) aParty->ApplyBuff(i, tableRow.AppliedBuff);
 		}
 		return attackValues; // Returns the array of attack values
 	}
@@ -81,7 +81,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireHeal(FAttackStruct tableRow, int 
 		// If this is the case, then a target must be chosen randomly from the remaining combatants
 		dIndex = RandomTarget(aParty);
 	}
-	if (tableRow.AppliedBuff.ValueToChange != -1) aParty->ApplyBuff(dIndex, tableRow.AppliedBuff);
+	if (tableRow.AppliedBuff != FName("-1")) aParty->ApplyBuff(dIndex, tableRow.AppliedBuff);
 	// Returns a TArray containing the single heal value fired at the ally combatant, using HealPartyMember()
 	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(aParty->HealPartyMember(aParty->GetMemberMagic(aIndex), dIndex, tableRow.DamageMultiplier),dIndex) });
 }
@@ -105,7 +105,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 			if (dParty->GetMemberCurrentHP(i) == 0) continue; // Moves to the next combatant if this target has no HP remaining
 			// Adds a value to the TArray, containing the damage value fired at the enemy combatant, using DamagePartyMember()
 			attackValues.Add(FAttackNumberStruct(dParty->DamagePartyMember(damageStat, i, tableRow.DamageMultiplier),i));
-			if (tableRow.AppliedBuff.ValueToChange != -1) dParty->ApplyBuff(i, tableRow.AppliedBuff);
+			if (tableRow.AppliedBuff != FName("-1")) dParty->ApplyBuff(i, tableRow.AppliedBuff);
 		}
 		return attackValues; // Returns the array of attack values
 	}
@@ -115,45 +115,34 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 		dIndex = RandomTarget(dParty);
 		if (dIndex == -1) return TArray<FAttackNumberStruct>(); // Returns nothing if there are no enemy combatants remaining
 	}
-	if (tableRow.AppliedBuff.ValueToChange != -1) dParty->ApplyBuff(dIndex, tableRow.AppliedBuff);
+	if (tableRow.AppliedBuff != FName("-1")) dParty->ApplyBuff(dIndex, tableRow.AppliedBuff);
 	// Returns a TArray containing the single damage value fired at the enemy combatant, using DamagePartyMember()
 	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(dParty->DamagePartyMember(damageStat, dIndex, tableRow.DamageMultiplier),dIndex) });
 }
 
-UTexture2D* UBattleWidget::GetBuffIcon(int buffType) {
-	switch (buffType) {
-		case 0:
-			return LoadObject<UTexture2D>(NULL, UTF8_TO_TCHAR("Texture2D'/Game/RPGContent/UI/Images/BuffIcons/AttackIcon.AttackIcon'"));
-		case 1:
-			return LoadObject<UTexture2D>(NULL, UTF8_TO_TCHAR("Texture2D'/Game/RPGContent/UI/Images/BuffIcons/MagicIcon.MagicIcon'"));
-		case 2:
-			return LoadObject<UTexture2D>(NULL, UTF8_TO_TCHAR("Texture2D'/Game/RPGContent/UI/Images/BuffIcons/DefenseIcon.DefenseIcon'"));
-		case 3:
-			return LoadObject<UTexture2D>(NULL, UTF8_TO_TCHAR("Texture2D'/Game/RPGContent/UI/Images/BuffIcons/SpeedIcon.SpeedIcon'"));
-	}
-	return nullptr;
-}
-
 /*Updates the UI display for the player party's HP values.*/
 TArray<int32> UBattleWidget::UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer) {
+	UDataTable* buffTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/BuffsDataTable.BuffsDataTable'"));
 	TArray<int32> defeatIndexes; // Empty array for players that need to play their defeat animation
 	for (int i = 0; i < playerParty->GetPartySize(); i++) { // Iterates through each party member
 		UTextBlock* HPText = Cast<UTextBlock>(HPContainer->GetChildAt(i)); // Casts child i of the passed in container to a Text Block object
+		UImage* BuffImage = Cast<UImage>(BuffContainer->GetChildAt(i));
 		// Sets the text to show the party members current HP information
 		HPText->SetText(FText::FromString(FString::FromInt(playerParty->GetMemberCurrentHP(i)) + "/" + FString::FromInt(playerParty->GetMemberMaxHP(i))));
 		HPText->SetVisibility(ESlateVisibility::Visible); // Makes sure the HP label is visible
 		if (playerParty->GetMemberCurrentHP(i) == 0) defeatIndexes.Add(i); // If the party member has no HP remaining, list them in the defeat array
-		if (playerParty->GetMemberBuffs(i).Num() > 0) { 
-			Cast<UImage>(BuffContainer->GetChildAt(i))->SetVisibility(ESlateVisibility::Visible);
-			Cast<UImage>(BuffContainer->GetChildAt(i))->SetBrushFromTexture(GetBuffIcon(playerParty->GetMemberBuffs(i)[0].ValueToChange));
+		if (playerParty->GetMemberBuff(i).BuffID != FName("-1")) {
+			BuffImage->SetVisibility(ESlateVisibility::Visible);
+			BuffImage->SetBrushFromTexture(buffTable->FindRow<FBuffRowStruct>(playerParty->GetMemberBuff(i).BuffID, FString())->Icon);
 		}
-		else Cast<UImage>(BuffContainer->GetChildAt(i))->SetVisibility(ESlateVisibility::Hidden);
+		else BuffImage->SetVisibility(ESlateVisibility::Hidden);
 	}
 	return defeatIndexes; // Returns a list of indexes for players that are defeated
 }
 
 /*Updates the UI display for the enemy party's HP values.*/
 TArray<int32> UBattleWidget::UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer) {
+	UDataTable* buffTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/BuffsDataTable.BuffsDataTable'"));
 	TArray<int32> hideIndexes; // Empty array for enemies that need to have their models hidden
 	for (int i = 0; i < enemyParty->GetPartySize(); i++) { // Iterates through each party member
 		UBorder* HPBorder = Cast<UBorder>(HPContainer->GetChildAt(i)); // Casts child i of the passed in container to a Border object
@@ -167,9 +156,9 @@ TArray<int32> UBattleWidget::UpdateEnemyHP(UAdditionalOperations* enemyParty, UV
 		HPBorder->SetVisibility(ESlateVisibility::Visible); // If the party member is still alive, makes sure their label is visible
 		// Then, obtains the child of the current border, and sets its text label to reflect the current value of their HP
 		Cast<UTextBlock>(HPBorder->GetChildAt(0))->SetText(FText::FromString(FString::FromInt(enemyParty->GetMemberCurrentHP(i)) + "/" + FString::FromInt(enemyParty->GetMemberMaxHP(i))));
-		if (enemyParty->GetMemberBuffs(i).Num() > 0) {
+		if (enemyParty->GetMemberBuff(i).BuffID != FName("-1")) {
 			BuffImage->SetVisibility(ESlateVisibility::Visible);
-			BuffImage->SetBrushFromTexture(GetBuffIcon(enemyParty->GetMemberBuffs(i)[0].ValueToChange));
+			BuffImage->SetBrushFromTexture(buffTable->FindRow<FBuffRowStruct>(enemyParty->GetMemberBuff(i).BuffID, FString())->Icon);
 		}
 		else BuffImage->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -177,7 +166,7 @@ TArray<int32> UBattleWidget::UpdateEnemyHP(UAdditionalOperations* enemyParty, UV
 }
 
 /*Cleans up hidden enemy party members that were defeated in the now finished turn.*/
-TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer) {
+TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer) {
 	ClearTargets(); // Clears out the set list of targets (in preparation for a new turn)
 	TArray<int32> destroyIndexes; // Empty array for enemies that need to have their models destroyed
 	for (int i = enemyParty->GetPartySize()-1; i >= 0; i--) { // Iterates backwards through each party member
@@ -185,6 +174,7 @@ TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVert
 			expEarned += enemyParty->GetMemberExp(i); // Adds enemy EXP to the earned EXP pool for the battle
 			enemyParty->RemovePartyMember(i); // Removes them from their associated AdditionalOperations component
 			HPContainer->RemoveChildAt(enemyParty->GetPartySize()); // Removes the last border from the HP container
+			BuffContainer->RemoveChildAt(enemyParty->GetPartySize()); // Removes the last border from the HP container
 			destroyIndexes.Add(i); // Adds the index to the list of indexes for models to be destroyed
 		}
 	}

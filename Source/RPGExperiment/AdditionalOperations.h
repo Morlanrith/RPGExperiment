@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/DataTable.h"
 #include "AdditionalOperations.generated.h"
 
 USTRUCT(BlueprintType)
@@ -21,19 +22,31 @@ struct FAttackDelay
 };
 
 USTRUCT(BlueprintType)
+struct FBuffRowStruct : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Row Struct")
+		float Augmentation;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Row Struct")
+		int32 ValueToChange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Row Struct")
+		int32 Duration;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Row Struct")
+		UTexture2D* Icon;
+};
+
+USTRUCT(BlueprintType)
 struct FBuffStruct
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Struct")
-		float Augmentation;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Struct")
-		int32 ValueToChange;
+		FName BuffID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buff Struct")
 		int32 RemainingTurns;
 
 	FBuffStruct();
-	FBuffStruct(float aug, int valType, int turns);
 };
 
 USTRUCT(BlueprintType)
@@ -55,11 +68,11 @@ struct FCombatantStruct
 		int32 Speed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		FName ModelID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		FBuffStruct CurrentBuff;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		TArray<int32> AttackList;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
-		TArray<FBuffStruct> Buffs = {};
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		int32 Level;
@@ -125,7 +138,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetMemberLevel(int index);
 	UFUNCTION(BlueprintCallable)
-		TArray<FBuffStruct> GetMemberBuffs(int index);
+		FBuffStruct GetMemberBuff(int index);
 	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
@@ -133,13 +146,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int HealPartyMember(int healAmount, int target, float healMultiplier);
 	UFUNCTION(BlueprintCallable)
-		void ApplyBuff(int target, FBuffStruct buff);
+		void ApplyBuff(int target, FName buffID);
 	UFUNCTION(BlueprintCallable)
-		void RemoveBuff(int target, int buffIndex);
+		void RemoveBuff(int target);
 	UFUNCTION(BlueprintCallable)
 		void TickBuffs();
-	UFUNCTION(BlueprintCallable)
-		void RemoveAllBuffs(int target);
 	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)

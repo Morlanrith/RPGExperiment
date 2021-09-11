@@ -64,7 +64,7 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		bool AttackAll;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
-		FBuffStruct AppliedBuff;
+		FName AppliedBuff = FName("-1");
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		int32 AnimationEnumID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
@@ -82,7 +82,6 @@ private:
 		void ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAdditionalOperations* playerParty);
 	UFUNCTION(BlueprintCallable)
 		void SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember);
-	UTexture2D* GetBuffIcon(int buffType);
 	TArray<FAttackNumberStruct> FireHeal(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty);
 	UFUNCTION(BlueprintCallable)
 		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
@@ -91,7 +90,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 		TArray<int32> UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer);
 	UFUNCTION(BlueprintCallable)
-		TArray<int32> EndingTurn(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer);
+		TArray<int32> EndingTurn(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer);
 	UFUNCTION(BlueprintCallable)
 		void ClearTargets();
 	UFUNCTION(BlueprintCallable)

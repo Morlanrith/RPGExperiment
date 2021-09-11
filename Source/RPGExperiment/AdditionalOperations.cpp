@@ -26,16 +26,8 @@ FAttackDelay::FAttackDelay(int typeID, float delay)
 
 FBuffStruct::FBuffStruct()
 {
-	Augmentation = 1.0f;
-	ValueToChange = -1;
+	BuffID = FName("-1");
 	RemainingTurns = 0;
-}
-
-FBuffStruct::FBuffStruct(float aug, int valueType, int turns)
-{
-	Augmentation = aug;
-	ValueToChange = valueType;
-	RemainingTurns = turns;
 }
 
 FCombatantStruct::FCombatantStruct()
@@ -48,6 +40,7 @@ FCombatantStruct::FCombatantStruct()
 	Speed = 1;
 	AttackList = {};
 	ModelID = FName(TEXT("0"));
+	CurrentBuff = FBuffStruct();
 	Level = 1;
 	Exp = 0;
 	ExpNeeded = 0;
@@ -68,6 +61,7 @@ FCombatantStruct::FCombatantStruct(int HP, int atk, int mag, int def, int spd, T
 	Speed = spd;
 	AttackList = attacks;
 	ModelID = modelID;
+	CurrentBuff = FBuffStruct();
 	Level = lvl;
 	Exp = 0;
 	ExpNeeded = expNeeded;
@@ -158,8 +152,8 @@ int UAdditionalOperations::GetMemberLevel(int index) {
 	return party[index].Level;
 }
 
-TArray<FBuffStruct> UAdditionalOperations::GetMemberBuffs(int index) {
-	return party[index].Buffs;
+FBuffStruct UAdditionalOperations::GetMemberBuff(int index) {
+	return party[index].CurrentBuff;
 }
 
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
@@ -170,6 +164,7 @@ int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, flo
 	if (newHP < 0) {
 		newHP = 0;
 		damageDone = party[target].CurrentHP;
+		if(party[target].CurrentBuff.BuffID != FName("-1")) RemoveBuff(target);
 	}
 	party[target].CurrentHP = newHP;
 	return damageDone;
@@ -186,49 +181,43 @@ int UAdditionalOperations::HealPartyMember(int healAmount, int target, float hea
 	return healingDone; // Returns the amount of healing done
 }
 
-void UAdditionalOperations::ApplyBuff(int target, FBuffStruct buff) {
-	for (int i = 0; i < party[target].Buffs.Num(); i++) {
-		if (party[target].Buffs[i].Augmentation == buff.Augmentation && party[target].Buffs[i].ValueToChange == buff.ValueToChange) {
-			party[target].Buffs[i].RemainingTurns = buff.RemainingTurns;
-			return;
-		}
+void UAdditionalOperations::ApplyBuff(int target, FName buffID) {
+	if (party[target].CurrentBuff.BuffID != FName("-1")) return;
+	FBuffRowStruct* buff = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/BuffsDataTable.BuffsDataTable'"))->FindRow<FBuffRowStruct>(buffID, FString());
+	if (party[target].CurrentBuff.BuffID == buffID) {
+		party[target].CurrentBuff.RemainingTurns = buff->Duration;
+		return;
 	}
-	if (buff.ValueToChange == 0)
-		party[target].Attack = round((float)party[target].Attack * buff.Augmentation);
-	else if (buff.ValueToChange == 1)
-		party[target].Magic = round((float)party[target].Magic * buff.Augmentation);
-	else if (buff.ValueToChange == 2)
-		party[target].Defense = round((float)party[target].Defense * buff.Augmentation);
-	else if (buff.ValueToChange == 3)
-		party[target].Speed = round((float)party[target].Speed * buff.Augmentation);
-	party[target].Buffs.Add(buff);
+	if (buff->ValueToChange == 0)
+		party[target].Attack = round((float)party[target].Attack * buff->Augmentation);
+	else if (buff->ValueToChange == 1)
+		party[target].Magic = round((float)party[target].Magic * buff->Augmentation);
+	else if (buff->ValueToChange == 2)
+		party[target].Defense = round((float)party[target].Defense * buff->Augmentation);
+	else if (buff->ValueToChange == 3)
+		party[target].Speed = round((float)party[target].Speed * buff->Augmentation);
+	party[target].CurrentBuff.BuffID = buffID;
+	party[target].CurrentBuff.RemainingTurns = buff->Duration;
 }
 
-void UAdditionalOperations::RemoveBuff(int target, int buffIndex) {
-	FBuffStruct buff = party[target].Buffs[buffIndex];
-	if (buff.ValueToChange == 0)
-		party[target].Attack = round((float)party[target].Attack / buff.Augmentation);
-	else if (buff.ValueToChange == 1)
-		party[target].Magic = round((float)party[target].Magic / buff.Augmentation);
-	else if (buff.ValueToChange == 2)
-		party[target].Defense = round((float)party[target].Defense / buff.Augmentation);
-	else if (buff.ValueToChange == 3)
-		party[target].Speed = round((float)party[target].Speed / buff.Augmentation);
-	party[target].Buffs.RemoveAt(buffIndex);
+void UAdditionalOperations::RemoveBuff(int target) {
+	FBuffRowStruct* buff = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/BuffsDataTable.BuffsDataTable'"))->FindRow<FBuffRowStruct>(party[target].CurrentBuff.BuffID, FString());
+	if (buff->ValueToChange == 0)
+		party[target].Attack = round((float)party[target].Attack / buff->Augmentation);
+	else if (buff->ValueToChange == 1)
+		party[target].Magic = round((float)party[target].Magic / buff->Augmentation);
+	else if (buff->ValueToChange == 2)
+		party[target].Defense = round((float)party[target].Defense / buff->Augmentation);
+	else if (buff->ValueToChange == 3)
+		party[target].Speed = round((float)party[target].Speed / buff->Augmentation);
+	party[target].CurrentBuff.BuffID = FName("-1");
 }
 
 void UAdditionalOperations::TickBuffs() {
 	for (int i = 0; i < party.Num(); i++) {
-		for (int j = party[i].Buffs.Num()-1; j >= 0; j--) {
-			if (!party[i].Buffs[j].RemainingTurns--)
-				RemoveBuff(i,j);
-		}
+		if (party[i].CurrentBuff.BuffID != FName("-1") && !party[i].CurrentBuff.RemainingTurns--)
+			RemoveBuff(i);
 	}
-}
-
-void UAdditionalOperations::RemoveAllBuffs(int target) {
-	for (int i = party[target].Buffs.Num() - 1; i >= 0; i--)
-		RemoveBuff(target, i);
 }
 
 TArray<FCombatantStruct> UAdditionalOperations::GetParty()
