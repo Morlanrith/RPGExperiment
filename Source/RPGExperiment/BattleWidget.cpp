@@ -2,6 +2,7 @@
 
 
 #include "BattleWidget.h"
+#include "PartyPlayerState.h"
 
 FTurnOrderStruct::FTurnOrderStruct()
 {
@@ -62,6 +63,17 @@ void UBattleWidget::ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAddit
 	}
 }
 
+/*Present allies you can choose to use the chosen skill on.*/
+void UBattleWidget::SelectAlly(UAdditionalOperations* playerParty, UCanvasPanel* allyCanvas) {
+	UDataTable* playerTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/PlayersDataTable.PlayersDataTable'"));
+	allyCanvas->SetVisibility(ESlateVisibility::Visible);
+	for (int i = 0; i < playerParty->GetPartySize(); i++) {
+		UButton* playerButton = Cast<UButton>(allyCanvas->GetChildAt(i+2));
+		playerButton->SetVisibility(ESlateVisibility::Visible);
+		playerButton->SetIsEnabled(playerParty->GetMemberCurrentHP(i)>0);
+		Cast<UTextBlock>(playerButton->GetChildAt(0))->SetText(FText::FromString(playerTable->FindRow<FPlayersDataStructure>(playerParty->GetMemberModelID(i), FString())->Name));
+	}
+}
 
 /*Fires the curent combatants heal.*/
 TArray<FAttackNumberStruct> UBattleWidget::FireHeal(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty) {
@@ -180,6 +192,19 @@ TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVert
 	}
 	enemyParty->TickBuffs();
 	return destroyIndexes; // Returns a list of indexes for enemies that are defeated
+}
+
+/*Cleans up health and buffs for the player party when the battle has ended.*/
+bool UBattleWidget::EndBattleCleanup(UAdditionalOperations* playerParty) {
+	bool defeated = true;
+	for (int i = 0; i < playerParty->GetPartySize(); i++) {
+		if (playerParty->GetMemberBuff(i).BuffID != FName("-1"))
+			playerParty->RemoveBuff(i);
+		if (playerParty->GetMemberCurrentHP(i) == 0)
+			playerParty->HealPartyMember(1,i,1.0f);
+		else defeated = false;
+	}
+	return defeated;
 }
 
 void UBattleWidget::ClearTargets() {

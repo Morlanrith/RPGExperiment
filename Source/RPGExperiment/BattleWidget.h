@@ -82,6 +82,8 @@ private:
 		void ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAdditionalOperations* playerParty);
 	UFUNCTION(BlueprintCallable)
 		void SetTarget(int speed, int attacker, int target, int attackID, bool isPartyMember);
+	UFUNCTION(BlueprintCallable)
+		void SelectAlly(UAdditionalOperations* playerParty, UCanvasPanel* allyCanvas);
 	TArray<FAttackNumberStruct> FireHeal(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty);
 	UFUNCTION(BlueprintCallable)
 		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
@@ -91,6 +93,8 @@ private:
 		TArray<int32> UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer);
 	UFUNCTION(BlueprintCallable)
 		TArray<int32> EndingTurn(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer);
+	UFUNCTION(BlueprintCallable)
+		bool EndBattleCleanup(UAdditionalOperations* playerParty);
 	UFUNCTION(BlueprintCallable)
 		void ClearTargets();
 	UFUNCTION(BlueprintCallable)
