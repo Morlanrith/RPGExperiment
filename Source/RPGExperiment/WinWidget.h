@@ -17,7 +17,7 @@ class RPGEXPERIMENT_API UWinWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintCallable)
-		TArray<FCombatantStruct> AddPartyExp(TArray<FCombatantStruct> party, UVerticalBox* partyBox);
+		void AddPartyExp(UVerticalBox* partyBox, UTextBlock* expText);
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 expEarned = 0;
 };
