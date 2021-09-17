@@ -32,7 +32,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 		void CreateModels(TArray<FCombatantStruct> players, TArray<FCombatantStruct> enemies);
 	UFUNCTION(BlueprintCallable)
-		void ChangeCamera(int32 playerToChangeTo);
+		void ChangeCamera(int32 playerToChangeTo, bool isPartyMember = true);
 	UFUNCTION(BlueprintCallable)
 		void HideEnemyModels(TArray<int32> indexes);
 	UFUNCTION(BlueprintCallable)

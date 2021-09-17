@@ -57,11 +57,18 @@ void UModelControl::CreateModels(TArray<FCombatantStruct> players, TArray<FComba
 }
 
 /*Changes the camera to the relevant perspective.*/
-void UModelControl::ChangeCamera(int32 playerToChangeTo) 
+void UModelControl::ChangeCamera(int32 playerToChangeTo, bool isPartyMember) 
 {
-	AActor* viewTarget = DefaultCamera; // Sets the default viewing target to be the standard camera
+	AActor* viewTarget;
 	// If the player to change to is not less than 0, then sets that player as the default viewing target
-	if (playerToChangeTo >= 0) viewTarget = PlayerParty[playerToChangeTo];
+	if (playerToChangeTo >= 0) viewTarget = isPartyMember ? PlayerParty[playerToChangeTo] : EnemyParty[playerToChangeTo];
+	else {
+		viewTarget = DefaultCamera; // Sets the default viewing target to be the standard camera
+		DefaultCamera->SetActorTransform(FTransform(
+			FQuat(0.0f, 0.0f, isPartyMember ? 0.0f : -180.0f, 0.0f), 
+			FVector(isPartyMember ? -180.0f : 120.0f, -530.0f, 120.0f)
+		));
+	}
 	GetWorld()->GetFirstPlayerController()->SetViewTargetWithBlend(viewTarget); // Sets the player view to be the default viewing target
 }
 
