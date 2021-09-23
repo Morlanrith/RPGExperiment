@@ -68,6 +68,8 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		int32 AnimationEnumID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		UParticleSystem* ParticleFX;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		FText AttackInfo;
 };
 
