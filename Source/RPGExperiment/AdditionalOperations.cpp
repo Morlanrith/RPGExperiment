@@ -184,10 +184,6 @@ int UAdditionalOperations::HealPartyMember(int healAmount, int target, float hea
 void UAdditionalOperations::ApplyBuff(int target, FName buffID) {
 	if (party[target].CurrentBuff.BuffID != FName("-1")) return;
 	FBuffRowStruct* buff = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/BuffsDataTable.BuffsDataTable'"))->FindRow<FBuffRowStruct>(buffID, FString());
-	if (party[target].CurrentBuff.BuffID == buffID) {
-		party[target].CurrentBuff.RemainingTurns = buff->Duration;
-		return;
-	}
 	if (buff->ValueToChange == 0)
 		party[target].Attack = round((float)party[target].Attack * buff->Augmentation);
 	else if (buff->ValueToChange == 1)
