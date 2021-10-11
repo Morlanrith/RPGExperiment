@@ -5,6 +5,9 @@ A testing grounds of sorts, in which a basic RPG prototype is being developed wi
 Models/Animations used from:
 https://www.mixamo.com/
 
+Music used from:
+https://www.dl-sounds.com
+
 Sound effects used from:
 https://mixkit.co/
 https://www.soundsnap.com/

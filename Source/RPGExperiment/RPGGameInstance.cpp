@@ -11,6 +11,8 @@ void URPGGameInstance::LoadSaveValues(USaveGame* savedGame) {
 }
 
 void URPGGameInstance::ResetValues() {
+	CurrentParty.Empty();
+	PlayerPosition = FTransform(FQuat(0.0f, 0.0f, 179.999756f, 0.0f), FVector(8805.0f, -230.0f, 1874.008789f), FVector(1.0f, 1.0f, 1.0f));
 	EncounteredEnemy.Empty();
 	RoamingEnemies.Empty();
 	EnemyPositions.Empty();
