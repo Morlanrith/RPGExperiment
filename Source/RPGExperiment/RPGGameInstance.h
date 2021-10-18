@@ -20,6 +20,8 @@ private:
 		void LoadSaveValues(USaveGame* savedGame);
 	UFUNCTION(BlueprintCallable)
 		void ResetValues();
+	UFUNCTION(BlueprintCallable)
+		void LevelTransition(FTransform newPos);
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		TArray<FCombatantStruct> CurrentParty;

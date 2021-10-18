@@ -19,3 +19,12 @@ void URPGGameInstance::ResetValues() {
 	RoamingEnemyIDs.Empty();
 	EnemyIndex = 0;
 }
+
+void URPGGameInstance::LevelTransition(FTransform newPos) {
+	PlayerPosition = newPos;
+	EncounteredEnemy.Empty();
+	RoamingEnemies.Empty();
+	EnemyPositions.Empty();
+	RoamingEnemyIDs.Empty();
+	EnemyIndex = 0;
+}
