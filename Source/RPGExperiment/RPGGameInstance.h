@@ -39,4 +39,6 @@ public:
 		int32 EnemyIndex = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int32 CurrentSaveSlot = -1;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		FName CurrentLevel;
 };

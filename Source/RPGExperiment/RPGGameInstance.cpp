@@ -8,6 +8,7 @@ void URPGGameInstance::LoadSaveValues(USaveGame* savedGame) {
 	UMyPartySaveGame* mySave = Cast<UMyPartySaveGame>(savedGame);
 	CurrentParty = mySave->SavedParty;
 	PlayerPosition = mySave->PlayerPos;
+	CurrentLevel = mySave->CurrentLevel;
 }
 
 void URPGGameInstance::ResetValues() {

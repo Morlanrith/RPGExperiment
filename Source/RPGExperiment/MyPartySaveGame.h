@@ -28,5 +28,8 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
         int32 UserIndex;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+        FName CurrentLevel;
+
     UMyPartySaveGame();
 };
