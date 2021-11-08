@@ -15,14 +15,18 @@ ARoamingEnemy::ARoamingEnemy()
 // Called when the game starts or when spawned
 void ARoamingEnemy::BeginPlay()
 {
-	UDataTable* EnemiesDataTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/EnemiesDataTable.EnemiesDataTable'"));
-	if (AvailableEnemies.Num() == 0) return;
-	Enemies->AddPartyMemberStruct(EnemiesDataTable->FindRow<FEnemiesDataStructure>(AvailableEnemies[0], FString())->Stats);
-	for (int i = 0; i < rand() % 3; i++) {
-		Enemies->AddPartyMemberStruct(EnemiesDataTable->FindRow<FEnemiesDataStructure>(AvailableEnemies[rand() % AvailableEnemies.Num()], FString())->Stats);
-	}
-
 	Super::BeginPlay();
+}
+
+// Called when the game starts or when spawned
+void ARoamingEnemy::CreateParty(TArray<FName> validEnemyTypes, FName thisEnemy)
+{
+	UDataTable* EnemiesDataTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/EnemiesDataTable.EnemiesDataTable'"));
+	if (validEnemyTypes.Num() == 0) return;
+	Enemies->AddPartyMemberStruct(EnemiesDataTable->FindRow<FEnemiesDataStructure>(thisEnemy, FString())->Stats);
+	for (int i = 0; i < rand() % 3; i++) {
+		Enemies->AddPartyMemberStruct(EnemiesDataTable->FindRow<FEnemiesDataStructure>(validEnemyTypes[rand() % validEnemyTypes.Num()], FString())->Stats);
+	}
 }
 
 // Called every frame

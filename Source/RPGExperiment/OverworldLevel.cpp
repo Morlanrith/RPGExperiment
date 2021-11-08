@@ -38,6 +38,7 @@ void AOverworldLevel::CreateEnemies(FVector startingLocation, TArray<FName> vali
 			}
 			// Spawns the enemy, storing a reference to it and its index
 			myGame->RoamingEnemies[i] = CreateAnEnemy(enemiesDataTable->FindRow<FEnemiesDataStructure>(index, FString())->EnemyType,spawnLocation,spawnRotation);
+			myGame->RoamingEnemies[i]->CreateParty(validEnemyTypes, index);
 			myGame->RoamingEnemyIDs[i] = index;
 		}
 		myGame->EnemyPositions.Empty(); // Empties the enemy positions array, as its values are no longer needed
@@ -54,6 +55,7 @@ void AOverworldLevel::CreateEnemies(FVector startingLocation, TArray<FName> vali
 					FRotator(0.0f,0.0f,0.0f)
 				)
 			);
+			myGame->RoamingEnemies[i]->CreateParty(validEnemyTypes, randIndex);
 			myGame->RoamingEnemyIDs.Add(randIndex); // Adds the index too
 		}
 	}

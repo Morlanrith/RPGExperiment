@@ -43,8 +43,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TArray<FName> AvailableEnemies;
+	void CreateParty(TArray<FName> validEnemyTypes, FName thisEnemy);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool IsMoving = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
