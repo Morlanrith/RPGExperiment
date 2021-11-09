@@ -51,7 +51,7 @@ FCombatantStruct::FCombatantStruct()
 	SpeedGrowth = 1.0f;
 }
 
-FCombatantStruct::FCombatantStruct(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG)
+FCombatantStruct::FCombatantStruct(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int TP, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG)
 {
 	MaxHP = HP;
 	CurrentHP = HP;
@@ -62,6 +62,8 @@ FCombatantStruct::FCombatantStruct(int HP, int atk, int mag, int def, int spd, T
 	AttackList = attacks;
 	ModelID = modelID;
 	CurrentBuff = FBuffStruct();
+	MaxTP = TP;
+	CurrentTP = TP;
 	Level = lvl;
 	Exp = 0;
 	ExpNeeded = expNeeded;
@@ -91,8 +93,8 @@ void UAdditionalOperations::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
-void UAdditionalOperations::AddPartyMember(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG) {
-	FCombatantStruct newMember(HP, atk, mag, def, spd, attacks, modelID, lvl, expNeeded, HPG, atkG, magG, defG, spdG);
+void UAdditionalOperations::AddPartyMember(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int TP, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG) {
+	FCombatantStruct newMember(HP, atk, mag, def, spd, attacks, modelID, TP, lvl, expNeeded, HPG, atkG, magG, defG, spdG);
 	party.Add(newMember);
 }
 
@@ -138,6 +140,15 @@ TArray<int32> UAdditionalOperations::GetMemberAttackList(int index) {
 
 FName UAdditionalOperations::GetMemberModelID(int index) {
 	return party[index].ModelID;
+}
+
+int UAdditionalOperations::GetMemberMaxTP(int index) {
+	return party[index].MaxTP;
+}
+
+
+int UAdditionalOperations::GetMemberCurrentTP(int index) {
+	return party[index].CurrentTP;
 }
 
 int UAdditionalOperations::GetMemberExp(int index) {
@@ -209,8 +220,20 @@ void UAdditionalOperations::RemoveBuff(int target) {
 	party[target].CurrentBuff.BuffID = FName("-1");
 }
 
-void UAdditionalOperations::TickBuffs() {
+void UAdditionalOperations::AddTP(int target, int tpAddition) {
+	party[target].CurrentTP += tpAddition;
+	if (party[target].CurrentTP > party[target].MaxTP)
+		party[target].CurrentTP = party[target].MaxTP;
+}
+
+void UAdditionalOperations::SpendTP(int target, int tpCost) {
+	if ((party[target].CurrentTP - tpCost) >= 0)
+		party[target].CurrentTP -= tpCost;
+}
+
+void UAdditionalOperations::TickBuffsAndTP() {
 	for (int i = 0; i < party.Num(); i++) {
+		AddTP(i);
 		if (party[i].CurrentBuff.BuffID != FName("-1") && !party[i].CurrentBuff.RemainingTurns--)
 			RemoveBuff(i);
 	}

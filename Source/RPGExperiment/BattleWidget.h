@@ -54,6 +54,8 @@ struct FAttackStruct : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		FName AttackName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
+		int32 TPCost;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		float DamageMultiplier;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack Struct")
 		int32 TargetNumber;

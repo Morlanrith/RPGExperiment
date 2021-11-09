@@ -72,6 +72,11 @@ struct FCombatantStruct
 		FBuffStruct CurrentBuff;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 MaxTP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		int32 CurrentTP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		TArray<int32> AttackList;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
@@ -92,7 +97,7 @@ struct FCombatantStruct
 		float SpeedGrowth;
 
 	FCombatantStruct();
-	FCombatantStruct(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG);
+	FCombatantStruct(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int TP, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG);
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -132,6 +137,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 		FName GetMemberModelID(int index);
 	UFUNCTION(BlueprintCallable)
+		int GetMemberMaxTP(int index);
+	UFUNCTION(BlueprintCallable)
+		int GetMemberCurrentTP(int index);
+	UFUNCTION(BlueprintCallable)
 		int GetMemberExp(int index);
 	UFUNCTION(BlueprintCallable)
 		int GetMemberExpNeeded(int index);
@@ -150,7 +159,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void RemoveBuff(int target);
 	UFUNCTION(BlueprintCallable)
-		void TickBuffs();
+		void AddTP(int target, int tpAddition = 1);
+	UFUNCTION(BlueprintCallable)
+		void SpendTP(int target, int tpCost);
+	UFUNCTION(BlueprintCallable)
+		void TickBuffsAndTP();
 	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)
@@ -158,7 +171,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)
-		void AddPartyMember(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG);
+		void AddPartyMember(int HP, int atk, int mag, int def, int spd, TArray<int32> attacks, FName modelID, int TP, int lvl, int expNeeded, float HPG, float atkG, float magG, float defG, float spdG);
 	UFUNCTION(BlueprintCallable)
 		void AddPartyMemberStruct(FCombatantStruct newMember);
 		

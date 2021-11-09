@@ -56,10 +56,13 @@ int UBattleWidget::RandomTarget(UAdditionalOperations* dParty) {
 
 /*Randomly sets each of the enemy party members attacks.*/
 void UBattleWidget::ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAdditionalOperations* playerParty) {
+	UDataTable* attackTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/AttackTable.AttackTable'"));
 	for (int i = 0; i < enemyParty->GetPartySize(); i++) { // Iterates through each enemy
 		TArray<int32> attackIDs = enemyParty->GetMemberAttackList(i); // Obtains the list of the enemy's attack indexes
+		int32 randAttack = attackIDs[rand() % attackIDs.Num()];
+		if (attackTable->FindRow<FAttackStruct>(FName(FString::FromInt(randAttack)), FString())->TPCost > enemyParty->GetMemberCurrentTP(i)) randAttack = 0;
 		// Sets the enemies target to be a valid random party member, using a random attack from their list
-		SetTarget(enemyParty->GetMemberSpeed(i),i,RandomTarget(playerParty), attackIDs[rand() % attackIDs.Num()],false);
+		SetTarget(enemyParty->GetMemberSpeed(i),i,RandomTarget(playerParty), randAttack,false);
 	}
 }
 
@@ -190,7 +193,7 @@ TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVert
 			destroyIndexes.Add(i); // Adds the index to the list of indexes for models to be destroyed
 		}
 	}
-	enemyParty->TickBuffs();
+	enemyParty->TickBuffsAndTP();
 	return destroyIndexes; // Returns a list of indexes for enemies that are defeated
 }
 
@@ -198,6 +201,7 @@ TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVert
 bool UBattleWidget::EndBattleCleanup(UAdditionalOperations* playerParty) {
 	bool defeated = true;
 	for (int i = 0; i < playerParty->GetPartySize(); i++) {
+		playerParty->AddTP(i,playerParty->GetMemberMaxTP(i));
 		if (playerParty->GetMemberBuff(i).BuffID != FName("-1"))
 			playerParty->RemoveBuff(i);
 		if (playerParty->GetMemberCurrentHP(i) == 0)
