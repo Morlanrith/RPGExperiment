@@ -3,6 +3,7 @@
 
 #include "BattleWidget.h"
 #include "PartyPlayerState.h"
+#include "TPBar.h"
 
 FTurnOrderStruct::FTurnOrderStruct()
 {
@@ -136,12 +137,13 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 }
 
 /*Updates the UI display for the player party's HP values.*/
-TArray<int32> UBattleWidget::UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer) {
+TArray<int32> UBattleWidget::UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer, UVerticalBox* TPContainer) {
 	UDataTable* buffTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/BuffsDataTable.BuffsDataTable'"));
 	TArray<int32> defeatIndexes; // Empty array for players that need to play their defeat animation
 	for (int i = 0; i < playerParty->GetPartySize(); i++) { // Iterates through each party member
 		UTextBlock* HPText = Cast<UTextBlock>(HPContainer->GetChildAt(i)); // Casts child i of the passed in container to a Text Block object
 		UImage* BuffImage = Cast<UImage>(BuffContainer->GetChildAt(i));
+		Cast<UTPBar>(TPContainer->GetChildAt(i))->UpdateTP(playerParty->GetMemberCurrentTP(i)); // Updates the TP bar for this party member
 		// Sets the text to show the party members current HP information
 		HPText->SetText(FText::FromString(FString::FromInt(playerParty->GetMemberCurrentHP(i)) + "/" + FString::FromInt(playerParty->GetMemberMaxHP(i))));
 		HPText->SetVisibility(ESlateVisibility::Visible); // Makes sure the HP label is visible

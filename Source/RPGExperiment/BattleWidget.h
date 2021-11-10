@@ -92,7 +92,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
 	UFUNCTION(BlueprintCallable)
-		TArray<int32> UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer);
+		TArray<int32> UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer, UVerticalBox* TPContainer);
 	UFUNCTION(BlueprintCallable)
 		TArray<int32> UpdateEnemyHP(UAdditionalOperations* enemyParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer);
 	UFUNCTION(BlueprintCallable)

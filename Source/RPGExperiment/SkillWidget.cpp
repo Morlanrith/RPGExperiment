@@ -7,11 +7,13 @@
 FSkillInfoStruct::FSkillInfoStruct() {
 	SkillName = FName("");
 	SkillInfo = FText::FromString("");
+	SkillCost = 0;
 }
 
-FSkillInfoStruct::FSkillInfoStruct(FName name, FText info) {
+FSkillInfoStruct::FSkillInfoStruct(FName name, FText info, int32 cost) {
 	SkillName = name;
 	SkillInfo = info;
+	SkillCost = cost;
 }
 
 TArray<FSkillInfoStruct> USkillWidget::GetSkills() {
@@ -27,7 +29,7 @@ TArray<FSkillInfoStruct> USkillWidget::GetSkills() {
 			for (int k = 0; k < skillList.Num(); k++)
 				if (skillList[k].SkillName == skill->AttackName) addSkill = false;
 			if(addSkill) 
-				skillList.Add(FSkillInfoStruct(skill->AttackName, skill->AttackInfo));
+				skillList.Add(FSkillInfoStruct(skill->AttackName, skill->AttackInfo, skill->TPCost));
 		}
 	}
 	return skillList;

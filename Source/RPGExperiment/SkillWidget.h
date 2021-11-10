@@ -20,9 +20,11 @@ struct FSkillInfoStruct
 		FName SkillName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill Info Struct")
 		FText SkillInfo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill Info Struct")
+		int32 SkillCost;
 
 	FSkillInfoStruct();
-	FSkillInfoStruct(FName name, FText info);
+	FSkillInfoStruct(FName name, FText info, int32 cost);
 };
 
 UCLASS()
