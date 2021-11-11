@@ -70,7 +70,8 @@ struct FCombatantStruct
 		FName ModelID;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		FBuffStruct CurrentBuff;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
+		bool Defending = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
 		int32 MaxTP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Party Struct")
@@ -133,6 +134,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetMemberSpeed(int index);
 	UFUNCTION(BlueprintCallable)
+		bool GetMemberDefending(int index);
+	UFUNCTION(BlueprintCallable)
 		TArray<int32> GetMemberAttackList(int index);
 	UFUNCTION(BlueprintCallable)
 		FName GetMemberModelID(int index);
@@ -151,7 +154,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int GetPartySize();
 	UFUNCTION(BlueprintCallable)
-		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier);
+		void SwapMemberDefense(int index);
+	UFUNCTION(BlueprintCallable)
+		int DamagePartyMember(int incomingAttack, int target, float attackMultiplier, bool absoluteDmg = false);
 	UFUNCTION(BlueprintCallable)
 		int HealPartyMember(int healAmount, int target, float healMultiplier);
 	UFUNCTION(BlueprintCallable)
@@ -164,6 +169,8 @@ public:
 		void SpendTP(int target, int tpCost);
 	UFUNCTION(BlueprintCallable)
 		void TickBuffsAndTP();
+	UFUNCTION(BlueprintCallable)
+		void StopDefending();
 	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)

@@ -41,6 +41,8 @@ FCombatantStruct::FCombatantStruct()
 	AttackList = {};
 	ModelID = FName(TEXT("0"));
 	CurrentBuff = FBuffStruct();
+	MaxTP = 1;
+	CurrentTP = 1;
 	Level = 1;
 	Exp = 0;
 	ExpNeeded = 0;
@@ -134,6 +136,10 @@ int UAdditionalOperations::GetMemberSpeed(int index) {
 	return party[index].Speed;
 }
 
+bool UAdditionalOperations::GetMemberDefending(int index) {
+	return party[index].Defending;
+}
+
 TArray<int32> UAdditionalOperations::GetMemberAttackList(int index) {
 	return party[index].AttackList;
 }
@@ -145,7 +151,6 @@ FName UAdditionalOperations::GetMemberModelID(int index) {
 int UAdditionalOperations::GetMemberMaxTP(int index) {
 	return party[index].MaxTP;
 }
-
 
 int UAdditionalOperations::GetMemberCurrentTP(int index) {
 	return party[index].CurrentTP;
@@ -167,8 +172,12 @@ FBuffStruct UAdditionalOperations::GetMemberBuff(int index) {
 	return party[index].CurrentBuff;
 }
 
-int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier) {
-	int damageValue = incomingAttack * attackMultiplier;
+void UAdditionalOperations::SwapMemberDefense(int index) {
+	party[index].Defending = !party[index].Defending;
+}
+
+int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier, bool absoluteDmg) {
+	int damageValue = !absoluteDmg && GetMemberDefending(target) ? (incomingAttack * attackMultiplier)/2 : incomingAttack * attackMultiplier;
 	int damageDone = damageValue - party[target].Defense; // Calculates damage amount
 	if (damageDone < 0 || party[target].CurrentHP == 0) return 0; // Ignores attack if it has no effect/target has not health left
 	int newHP = party[target].CurrentHP - damageDone; // Applies damage
@@ -236,6 +245,12 @@ void UAdditionalOperations::TickBuffsAndTP() {
 		AddTP(i);
 		if (party[i].CurrentBuff.BuffID != FName("-1") && !party[i].CurrentBuff.RemainingTurns--)
 			RemoveBuff(i);
+	}
+}
+
+void UAdditionalOperations::StopDefending() {
+	for (int i = 0; i < party.Num(); i++) {
+		party[i].Defending = false;
 	}
 }
 
