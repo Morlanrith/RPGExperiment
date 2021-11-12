@@ -170,8 +170,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void TickBuffsAndTP();
 	UFUNCTION(BlueprintCallable)
-		void StopDefending();
-	UFUNCTION(BlueprintCallable)
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)
 		void SetParty(TArray<FCombatantStruct> savedParty);

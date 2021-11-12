@@ -203,12 +203,12 @@ TArray<int32> UBattleWidget::EndingTurn(UAdditionalOperations* enemyParty, UVert
 bool UBattleWidget::EndBattleCleanup(UAdditionalOperations* playerParty) {
 	bool defeated = true;
 	for (int i = 0; i < playerParty->GetPartySize(); i++) {
-		playerParty->AddTP(i,playerParty->GetMemberMaxTP(i));
 		if (playerParty->GetMemberBuff(i).BuffID != FName("-1"))
 			playerParty->RemoveBuff(i);
 		if (playerParty->GetMemberCurrentHP(i) == 0)
 			playerParty->HealPartyMember(1,i,1.0f);
 		else defeated = false;
+		playerParty->AddTP(i, playerParty->GetMemberMaxTP(i));
 	}
 	return defeated;
 }

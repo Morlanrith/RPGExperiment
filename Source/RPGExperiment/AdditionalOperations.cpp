@@ -184,6 +184,7 @@ int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, flo
 	if (newHP < 0) {
 		newHP = 0;
 		damageDone = party[target].CurrentHP;
+		party[target].CurrentTP = 0;
 		if(party[target].CurrentBuff.BuffID != FName("-1")) RemoveBuff(target);
 	}
 	party[target].CurrentHP = newHP;
@@ -230,6 +231,7 @@ void UAdditionalOperations::RemoveBuff(int target) {
 }
 
 void UAdditionalOperations::AddTP(int target, int tpAddition) {
+	if (!party[target].CurrentHP) return;
 	party[target].CurrentTP += tpAddition;
 	if (party[target].CurrentTP > party[target].MaxTP)
 		party[target].CurrentTP = party[target].MaxTP;
@@ -245,12 +247,6 @@ void UAdditionalOperations::TickBuffsAndTP() {
 		AddTP(i);
 		if (party[i].CurrentBuff.BuffID != FName("-1") && !party[i].CurrentBuff.RemainingTurns--)
 			RemoveBuff(i);
-	}
-}
-
-void UAdditionalOperations::StopDefending() {
-	for (int i = 0; i < party.Num(); i++) {
-		party[i].Defending = false;
 	}
 }
 
