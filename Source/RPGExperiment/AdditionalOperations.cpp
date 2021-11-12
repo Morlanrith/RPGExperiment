@@ -177,8 +177,8 @@ void UAdditionalOperations::SwapMemberDefense(int index) {
 }
 
 int UAdditionalOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier, bool absoluteDmg) {
-	int damageValue = !absoluteDmg && GetMemberDefending(target) ? (incomingAttack * attackMultiplier)/2 : incomingAttack * attackMultiplier;
-	int damageDone = damageValue - party[target].Defense; // Calculates damage amount
+	int damageValue = incomingAttack * attackMultiplier;
+	int damageDone = !absoluteDmg && GetMemberDefending(target) ? (damageValue - party[target].Defense)/2 : damageValue - party[target].Defense; // Calculates damage amount
 	if (damageDone < 0 || party[target].CurrentHP == 0) return 0; // Ignores attack if it has no effect/target has not health left
 	int newHP = party[target].CurrentHP - damageDone; // Applies damage
 	if (newHP < 0) {
