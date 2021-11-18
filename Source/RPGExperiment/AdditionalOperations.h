@@ -173,6 +173,8 @@ public:
 		TArray<FCombatantStruct> GetParty();
 	UFUNCTION(BlueprintCallable)
 		void SetParty(TArray<FCombatantStruct> savedParty);
+	UFUNCTION(BlueprintCallable)
+		bool IsPartyAlive();
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable)

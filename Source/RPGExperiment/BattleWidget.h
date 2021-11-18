@@ -90,7 +90,7 @@ private:
 		void SelectAlly(UAdditionalOperations* playerParty, UCanvasPanel* allyCanvas);
 	TArray<FAttackNumberStruct> FireHeal(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty);
 	UFUNCTION(BlueprintCallable)
-		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty);
+		TArray<FAttackNumberStruct> FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty, float QTEBoost = 1.0f);
 	UFUNCTION(BlueprintCallable)
 		TArray<int32> UpdatePlayerHP(UAdditionalOperations* playerParty, UVerticalBox* HPContainer, UVerticalBox* BuffContainer, UVerticalBox* TPContainer);
 	UFUNCTION(BlueprintCallable)

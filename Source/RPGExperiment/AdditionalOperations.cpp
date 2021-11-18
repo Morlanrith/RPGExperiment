@@ -260,3 +260,10 @@ void UAdditionalOperations::SetParty(TArray<FCombatantStruct> savedParty)
 	party = savedParty;
 }
 
+bool UAdditionalOperations::IsPartyAlive()
+{
+	for (int i = 0; i < party.Num(); i++)
+		if (party[i].CurrentHP > 0) return true;
+	return false;
+}
+

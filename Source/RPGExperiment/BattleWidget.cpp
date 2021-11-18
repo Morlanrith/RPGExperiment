@@ -103,7 +103,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireHeal(FAttackStruct tableRow, int 
 }
 
 /*Attempts to fire the curent combatants attack.*/
-TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty) {
+TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, int aIndex, int dIndex, UAdditionalOperations* aParty, UAdditionalOperations* dParty, float QTEBoost) {
 	if(aParty->GetMemberCurrentHP(aIndex) == 0) return TArray<FAttackNumberStruct>(); // Returns nothing if the attacker has no HP remaining
 	int32 damageStat = 0;
 	if (tableRow.AttackType == 3)
@@ -120,7 +120,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 		for (int i = 0; i < dParty->GetPartySize(); i++) {
 			if (dParty->GetMemberCurrentHP(i) == 0) continue; // Moves to the next combatant if this target has no HP remaining
 			// Adds a value to the TArray, containing the damage value fired at the enemy combatant, using DamagePartyMember()
-			attackValues.Add(FAttackNumberStruct(dParty->DamagePartyMember(damageStat, i, tableRow.DamageMultiplier),i));
+			attackValues.Add(FAttackNumberStruct(dParty->DamagePartyMember(damageStat, i, tableRow.DamageMultiplier*QTEBoost),i));
 			if (tableRow.AppliedBuff != FName("-1")) dParty->ApplyBuff(i, tableRow.AppliedBuff);
 		}
 		return attackValues; // Returns the array of attack values
@@ -133,7 +133,7 @@ TArray<FAttackNumberStruct> UBattleWidget::FireAttack(FAttackStruct tableRow, in
 	}
 	if (tableRow.AppliedBuff != FName("-1")) dParty->ApplyBuff(dIndex, tableRow.AppliedBuff);
 	// Returns a TArray containing the single damage value fired at the enemy combatant, using DamagePartyMember()
-	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(dParty->DamagePartyMember(damageStat, dIndex, tableRow.DamageMultiplier),dIndex) });
+	return TArray<FAttackNumberStruct>({ FAttackNumberStruct(dParty->DamagePartyMember(damageStat, dIndex, tableRow.DamageMultiplier*QTEBoost),dIndex) });
 }
 
 /*Updates the UI display for the player party's HP values.*/
