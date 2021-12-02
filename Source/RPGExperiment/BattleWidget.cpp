@@ -3,6 +3,7 @@
 
 #include "BattleWidget.h"
 #include "PartyPlayerState.h"
+#include "BossOperations.h"
 #include "TPBar.h"
 
 FTurnOrderStruct::FTurnOrderStruct()
@@ -57,6 +58,11 @@ int UBattleWidget::RandomTarget(UAdditionalOperations* dParty) {
 
 /*Randomly sets each of the enemy party members attacks.*/
 void UBattleWidget::ChooseEnemyAttacks(UAdditionalOperations* enemyParty, UAdditionalOperations* playerParty) {
+	
+	if(Cast<UBossOperations>(enemyParty)) { // TEST THIS
+		SetTarget(enemyParty->GetMemberSpeed(0),0,RandomTarget(playerParty), Cast<UBossOperations>(enemyParty)->SelectAttack(playerParty),false);
+		return;
+	}
 	UDataTable* attackTable = LoadObject<UDataTable>(NULL, UTF8_TO_TCHAR("DataTable'/Game/RPGContent/DataTables/AttackTable.AttackTable'"));
 	for (int i = 0; i < enemyParty->GetPartySize(); i++) { // Iterates through each enemy
 		TArray<int32> attackIDs = enemyParty->GetMemberAttackList(i); // Obtains the list of the enemy's attack indexes
