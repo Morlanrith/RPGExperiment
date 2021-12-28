@@ -46,6 +46,8 @@ public:
 	void CreateParty(TArray<FName> validEnemyTypes, FName thisEnemy);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool IsMoving = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsBoss = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		class UAdditionalOperations* Enemies;
 };

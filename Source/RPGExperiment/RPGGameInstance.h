@@ -41,4 +41,6 @@ public:
 		int32 CurrentSaveSlot = -1;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		FName CurrentLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool IsBossFight = false;
 };

@@ -46,12 +46,14 @@ void UModelControl::CreateModels(TArray<FCombatantStruct> players, TArray<FComba
 				FTransform(FQuat(0.0f,0.0f,-180.0f,0.0f),FVector(DefaultLocation.X, DefaultLocation.Y - (300.0f * i), DefaultLocation.Z)) // Places each model at a determined offset from the default location
 			)
 		);
+	FVector locCopy = DefaultLocation;
+	if(enemies.Num() == 1) locCopy.Y = locCopy.Y - 300.0f;
 	for (int i = 0; i < enemies.Num(); i++) // Iterates for each enemy party member
 		// Adds to the list of enemy party actors
 		EnemyParty.Add(
 			GetWorld()->SpawnActor<ACharacter>( // Spawns a character
 				ModelDataTable->FindRow<FModelsDataStructure>(enemies[i].ModelID, FString())->Model, // Obtains the relevant model from the data table
-				FTransform(FVector(DefaultLocation.X-600.0f, DefaultLocation.Y - (300.0f * i), DefaultLocation.Z)) // Places each model at a determined offset from the default location
+				FTransform(FVector(locCopy.X-600.0f, locCopy.Y - (300.0f * i), locCopy.Z)) // Places each model at a determined offset from the default location
 				)
 		);
 }

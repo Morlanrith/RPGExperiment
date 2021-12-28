@@ -19,6 +19,7 @@ void URPGGameInstance::ResetValues() {
 	EnemyPositions.Empty();
 	RoamingEnemyIDs.Empty();
 	EnemyIndex = 0;
+	IsBossFight = false;
 }
 
 void URPGGameInstance::LevelTransition(FTransform newPos) {

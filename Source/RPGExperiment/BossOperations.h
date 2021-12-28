@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class RPGEXPERIMENT_API UBossOperations : public UAdditionalOperations
 {
 	GENERATED_BODY()
