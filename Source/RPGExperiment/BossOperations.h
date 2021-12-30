@@ -14,5 +14,7 @@ class RPGEXPERIMENT_API UBossOperations : public UAdditionalOperations
 {
 	GENERATED_BODY()
 public:
+	int ultimateTick = 5;
 	int32 SelectAttack(UAdditionalOperations* playerParty);
+	int DamagePartyMember(int incomingAttack, int target, float attackMultiplier, bool absoluteDmg);
 };

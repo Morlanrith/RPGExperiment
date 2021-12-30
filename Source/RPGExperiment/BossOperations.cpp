@@ -4,8 +4,19 @@
 #include "BossOperations.h"
 
 int32 UBossOperations::SelectAttack(UAdditionalOperations* playerParty) {
-	TArray<int32> attackIDs = GetMemberAttackList(0);
-	if (GetMemberCurrentHP(0) > 650) return attackIDs[rand() % attackIDs.Num()];
+	if (GetMemberCurrentHP(0) > 900) return 0;
+	ultimateTick--;
+	if (!ultimateTick) {
+		ultimateTick = 5;
+		return 17;
+	}
+	if (ultimateTick == 1) return 16;
 	if (GetMemberBuff(0).BuffID == FName("-1")) return 15;
-	return 0;
+	TArray<int32> _ = GetMemberAttackList(0);
+	return _[rand() % _.Num()];
+}
+
+int UBossOperations::DamagePartyMember(int incomingAttack, int target, float attackMultiplier, bool absoluteDmg) {
+	int damageDone = UAdditionalOperations::DamagePartyMember(incomingAttack, target, attackMultiplier, absoluteDmg);
+	return damageDone;
 }
