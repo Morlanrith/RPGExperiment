@@ -19,10 +19,17 @@ void UWinWidget::AddPartyExp(UVerticalBox* partyBox, UTextBlock* expText) {
 		UWrapBox* pBox = Cast<UWrapBox>(partyBox->GetChildAt(i)); // Obtains the next Wrap Box
 		myGame->CurrentParty[i].Exp += expEarned; // Adds exp gained
 		// Levels party member up if needed
-		while (myGame->CurrentParty[i].Exp >= myGame->CurrentParty[i].ExpNeeded && myGame->CurrentParty[i].Level < 20) {
-			myGame->CurrentParty[i].Exp -= myGame->CurrentParty[i].ExpNeeded;
-			myGame->CurrentParty[i].ExpNeeded *= 1.5f;
+		while (myGame->CurrentParty[i].Exp >= myGame->CurrentParty[i].ExpNeeded && myGame->CurrentParty[i].Level < 5) {
 			myGame->CurrentParty[i].Level++;
+			myGame->CurrentParty[i].Exp -= myGame->CurrentParty[i].ExpNeeded;
+			if (myGame->CurrentParty[i].Level < 5) {
+				myGame->CurrentParty[i].Exp -= myGame->CurrentParty[i].ExpNeeded;
+				myGame->CurrentParty[i].ExpNeeded *= 1.5f;
+			}
+			else {
+				myGame->CurrentParty[i].Exp = 0;
+				myGame->CurrentParty[i].ExpNeeded = 0;
+			}
 			myGame->CurrentParty[i].MaxHP += myGame->CurrentParty[i].Level % 2 == 0 ? myGame->CurrentParty[i].HPGrowth : myGame->CurrentParty[i].HPGrowth + 1;
 			myGame->CurrentParty[i].CurrentHP = myGame->CurrentParty[i].MaxHP;
 			myGame->CurrentParty[i].Attack += myGame->CurrentParty[i].Level % 2 == 0 ? myGame->CurrentParty[i].AttackGrowth : myGame->CurrentParty[i].AttackGrowth + 1;

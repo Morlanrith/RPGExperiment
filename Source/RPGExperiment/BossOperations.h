@@ -15,6 +15,6 @@ class RPGEXPERIMENT_API UBossOperations : public UAdditionalOperations
 	GENERATED_BODY()
 public:
 	int ultimateTick = 5;
-	int absorbingHP = 999;
+	int absorbingHP = 400;
 	int32 SelectAttack(UAdditionalOperations* playerParty);
 };
