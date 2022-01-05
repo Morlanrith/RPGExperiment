@@ -17,11 +17,10 @@ void UWinWidget::AddPartyExp(UVerticalBox* partyBox, UTextBlock* expText) {
 		// Obtains the row from the data table that is relevant to the current party member
 		FPlayersDataStructure* pRow = pDataTable->FindRow<FPlayersDataStructure>(myGame->CurrentParty[i].ModelID, FString());
 		UWrapBox* pBox = Cast<UWrapBox>(partyBox->GetChildAt(i)); // Obtains the next Wrap Box
-		myGame->CurrentParty[i].Exp += expEarned; // Adds exp gained
+		if(myGame->CurrentParty[i].Level < 5) myGame->CurrentParty[i].Exp += expEarned; // Adds exp gained
 		// Levels party member up if needed
 		while (myGame->CurrentParty[i].Exp >= myGame->CurrentParty[i].ExpNeeded && myGame->CurrentParty[i].Level < 5) {
 			myGame->CurrentParty[i].Level++;
-			myGame->CurrentParty[i].Exp -= myGame->CurrentParty[i].ExpNeeded;
 			if (myGame->CurrentParty[i].Level < 5) {
 				myGame->CurrentParty[i].Exp -= myGame->CurrentParty[i].ExpNeeded;
 				myGame->CurrentParty[i].ExpNeeded *= 1.5f;
