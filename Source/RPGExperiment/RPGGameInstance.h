@@ -43,4 +43,6 @@ public:
 		FName CurrentLevel;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool IsBossFight = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool NewGame = false;
 };
